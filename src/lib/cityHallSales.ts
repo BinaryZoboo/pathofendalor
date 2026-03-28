@@ -8,6 +8,7 @@ export type CityHallSale = {
   currency: string;
   listedAt: string | null;
   expiresAt: string | null;
+  enchantments: string[];
 };
 
 export type CityHallSalesResponse = {

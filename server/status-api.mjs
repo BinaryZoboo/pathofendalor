@@ -269,6 +269,126 @@ function parseDateToIso(value) {
   return null;
 }
 
+function toRoman(value) {
+  const numerals = [
+    [10, "X"],
+    [9, "IX"],
+    [5, "V"],
+    [4, "IV"],
+    [1, "I"],
+  ];
+
+  let remaining = Math.max(1, Math.floor(value));
+  let output = "";
+
+  for (const [unit, symbol] of numerals) {
+    while (remaining >= unit) {
+      output += symbol;
+      remaining -= unit;
+    }
+  }
+
+  return output || "I";
+}
+
+function formatEnchantmentName(rawKey) {
+  const cleanKey = toSafeText(rawKey, "").replace(/^minecraft:/i, "");
+  if (!cleanKey) return "Enchantement";
+
+  return cleanKey
+    .split("_")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+function normalizeEnchantmentPairs(levels) {
+  if (!levels) return [];
+
+  if (Array.isArray(levels)) {
+    return levels
+      .map((entry) => {
+        if (!entry || typeof entry !== "object") return null;
+
+        const key =
+          entry.id ??
+          entry.enchantment ??
+          entry.key ??
+          entry.name ??
+          entry.type;
+
+        const level =
+          toNumber(entry.level ?? entry.lvl ?? entry.value ?? entry.amount) ??
+          null;
+
+        if (!key || level === null) return null;
+        return [String(key), level];
+      })
+      .filter(Boolean);
+  }
+
+  if (typeof levels === "object") {
+    return Object.entries(levels)
+      .map(([name, level]) => {
+        const levelNumber = toNumber(level);
+        if (levelNumber === null) return null;
+        return [name, levelNumber];
+      })
+      .filter(Boolean);
+  }
+
+  return [];
+}
+
+function findEnchantmentLevels(container) {
+  if (!container || typeof container !== "object") {
+    return null;
+  }
+
+  const directCandidates = [
+    container?.components?.["minecraft:enchantments"]?.levels,
+    container?.components?.["minecraft:stored_enchantments"]?.levels,
+    container?.components?.enchantments?.levels,
+    container?.components?.stored_enchantments?.levels,
+    container?.enchantments?.levels,
+    container?.stored_enchantments?.levels,
+    container?.enchantments,
+  ];
+
+  for (const candidate of directCandidates) {
+    if (candidate && typeof candidate === "object") {
+      return candidate;
+    }
+  }
+
+  return null;
+}
+
+function parseEnchantments(entry) {
+  const containers = [
+    entry,
+    entry?.item,
+    entry?.stack,
+    entry?.itemStack,
+    entry?.listing,
+    entry?.offer,
+    entry?.data,
+  ];
+
+  for (const container of containers) {
+    const levels = findEnchantmentLevels(container);
+    if (!levels) continue;
+
+    const pairs = normalizeEnchantmentPairs(levels);
+    if (!pairs.length) continue;
+
+    return pairs.map(
+      ([name, level]) => `${formatEnchantmentName(name)} ${toRoman(level)}`,
+    );
+  }
+
+  return [];
+}
+
 function parseCityHallSales(rawJson) {
   const empty = {
     available: false,
@@ -287,7 +407,15 @@ function parseCityHallSales(rawJson) {
         ? rawJson.listings
         : Array.isArray(rawJson.items)
           ? rawJson.items
-          : [];
+          : rawJson?.sales && typeof rawJson.sales === "object"
+            ? Object.values(rawJson.sales)
+            : rawJson?.listings && typeof rawJson.listings === "object"
+              ? Object.values(rawJson.listings)
+              : rawJson?.items && typeof rawJson.items === "object"
+                ? Object.values(rawJson.items)
+                : rawJson && typeof rawJson === "object"
+                  ? Object.values(rawJson)
+                  : [];
 
   const normalized = [];
 
@@ -331,6 +459,7 @@ function parseCityHallSales(rawJson) {
     const expiresAt = parseDateToIso(
       entry.expiresAt ?? entry.expiration ?? entry.expireAt,
     );
+    const enchantments = parseEnchantments(entry);
 
     normalized.push({
       id: toSafeText(entry.id ?? entry.uuid ?? i, String(i)),
@@ -342,6 +471,7 @@ function parseCityHallSales(rawJson) {
       currency: toSafeText(entry.currency ?? "$", "$"),
       listedAt,
       expiresAt,
+      enchantments,
     });
   }
 
