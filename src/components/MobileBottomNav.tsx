@@ -11,7 +11,7 @@ function MobileBottomNav({
     { key: "dashboard", label: "Dashboard", icon: "dashboard" },
     { key: "craft", label: "Craft", icon: "handyman" },
     { key: "bestiary", label: "Boss", icon: "skull" },
-    { key: "cityhall", label: "Hotel", icon: "storefront" },
+    { key: "auctionhouse", label: "Hotel", icon: "storefront" },
     { key: "rules", label: "Regles", icon: "gavel" },
   ];
 

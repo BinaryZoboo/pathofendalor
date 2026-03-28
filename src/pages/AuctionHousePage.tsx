@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 
-import cityHallHero from "../assets/hdvlostark.jpg";
+import auctionHouseHero from "../assets/hdvlostark.jpg";
 import {
-  fetchCityHallSales,
-  type CityHallSale,
-  type CityHallSalesResponse,
-} from "../lib/cityHallSales";
+  fetchAuctionHouseSales,
+  type AuctionHouseSale,
+  type AuctionHouseSalesResponse,
+} from "../lib/auctionHouseSales";
 
 type SortKey = "itemName" | "seller" | "price" | "quantity" | "listedAt";
 
 function sortSales(
-  sales: CityHallSale[],
+  sales: AuctionHouseSale[],
   sortBy: SortKey,
   sortDirection: "asc" | "desc",
 ) {
@@ -108,8 +108,10 @@ function SortChip({
   );
 }
 
-function CityHallPage() {
-  const [payload, setPayload] = useState<CityHallSalesResponse | null>(null);
+function AuctionHousePage() {
+  const [payload, setPayload] = useState<AuctionHouseSalesResponse | null>(
+    null,
+  );
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortKey>("price");
@@ -121,7 +123,7 @@ function CityHallPage() {
 
     const loadSales = async () => {
       try {
-        const result = await fetchCityHallSales();
+        const result = await fetchAuctionHouseSales();
         if (!active) return;
         setPayload(result);
         setError(null);
@@ -205,8 +207,8 @@ function CityHallPage() {
     <section className="space-y-8">
       <section className="relative overflow-hidden rounded-3xl border border-(--outline-variant)/50 p-6 md:p-10">
         <img
-          src={cityHallHero}
-          alt="Hotel de ville marketplace"
+          src={auctionHouseHero}
+          alt="Hotel des ventes marketplace"
           className="absolute inset-0 h-full w-full object-cover opacity-28"
         />
         <div className="absolute inset-0 bg-linear-to-r from-(--background) via-(--background)/78 to-(--background)/38" />
@@ -216,7 +218,7 @@ function CityHallPage() {
             ECONOMYCRAFT // MARKET FEED
           </p>
           <h2 className="mt-3 font-headline text-4xl font-bold tracking-tight md:text-6xl">
-            Hotel de ville
+            Hotel des ventes
             <span className="hero-gradient-text block">
               place de marche live
             </span>
@@ -268,7 +270,7 @@ function CityHallPage() {
         <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
           <div className="w-full xl:max-w-lg">
             <label
-              htmlFor="cityhall-search"
+              htmlFor="auctionhouse-search"
               className="mb-2 block font-label text-[10px] tracking-[0.14em] text-(--muted)"
             >
               RECHERCHE RAPIDE
@@ -278,7 +280,7 @@ function CityHallPage() {
                 search
               </span>
               <input
-                id="cityhall-search"
+                id="auctionhouse-search"
                 type="text"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
@@ -445,4 +447,4 @@ function CityHallPage() {
   );
 }
 
-export default CityHallPage;
+export default AuctionHousePage;

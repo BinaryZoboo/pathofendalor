@@ -1,4 +1,4 @@
-export type CityHallSale = {
+export type AuctionHouseSale = {
   id: string;
   seller: string;
   itemName: string;
@@ -11,16 +11,16 @@ export type CityHallSale = {
   enchantments: string[];
 };
 
-export type CityHallSalesResponse = {
+export type AuctionHouseSalesResponse = {
   available: boolean;
   count: number;
   updatedAt: string;
-  sales: CityHallSale[];
+  sales: AuctionHouseSale[];
 };
 
-const API_PATH = "/api/cityhall-sales";
+const API_PATH = "/api/auction-house-sales";
 
-export async function fetchCityHallSales(): Promise<CityHallSalesResponse> {
+export async function fetchAuctionHouseSales(): Promise<AuctionHouseSalesResponse> {
   const response = await fetch(API_PATH, {
     headers: {
       "Content-Type": "application/json",
@@ -28,8 +28,8 @@ export async function fetchCityHallSales(): Promise<CityHallSalesResponse> {
   });
 
   if (!response.ok) {
-    throw new Error(`City hall API failed with ${response.status}`);
+    throw new Error(`Auction house API failed with ${response.status}`);
   }
 
-  return (await response.json()) as CityHallSalesResponse;
+  return (await response.json()) as AuctionHouseSalesResponse;
 }

@@ -1,1 +1,6 @@
-export type PageKey = "dashboard" | "craft" | "bestiary" | "cityhall" | "rules";
+export type PageKey =
+  | "dashboard"
+  | "craft"
+  | "bestiary"
+  | "auctionhouse"
+  | "rules";

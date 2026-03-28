@@ -1,7 +1,8 @@
 import dotenv from "dotenv";
 import express from "express";
 import { status as minecraftStatus } from "minecraft-server-util";
-import { readFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { dirname } from "node:path";
 import SftpClient from "ssh2-sftp-client";
 
 dotenv.config();
@@ -15,6 +16,10 @@ const playerNameCacheTtlMs = Number(
 );
 const enableMojangNameLookup =
   (process.env.ENABLE_MOJANG_NAME_LOOKUP ?? "true").toLowerCase() !== "false";
+const cityHallHistoryPath =
+  process.env.AUCTION_HOUSE_HISTORY_PATH ??
+  process.env.CITYHALL_HISTORY_PATH ??
+  "./server/data/auction-house-listing-history.json";
 
 let cached = null;
 let cachedAt = 0;
@@ -23,6 +28,7 @@ let economyCachedAt = 0;
 let cityHallSalesCached = null;
 let cityHallSalesCachedAt = 0;
 const playerNameCache = new Map();
+let cityHallListingHistory = null;
 
 function toNumber(value) {
   const parsed = Number(value);
@@ -389,6 +395,108 @@ function parseEnchantments(entry) {
   return [];
 }
 
+function buildCityHallTrackingKey(entry, normalizedSale) {
+  const explicitId = toSafeText(
+    entry?.id ?? entry?.uuid ?? entry?.listingId ?? entry?.offerId,
+    "",
+  );
+
+  if (explicitId) {
+    return `id:${explicitId.toLowerCase()}`;
+  }
+
+  const sellerKey = normalizedSale.seller.toLowerCase();
+  const itemKey = normalizedSale.itemName.toLowerCase();
+  const enchantmentsKey = normalizedSale.enchantments.join("|").toLowerCase();
+
+  return `fp:${sellerKey}::${itemKey}::${normalizedSale.price}::${normalizedSale.quantity}::${enchantmentsKey}`;
+}
+
+async function readCityHallListingHistory() {
+  if (cityHallListingHistory) {
+    return cityHallListingHistory;
+  }
+
+  try {
+    const raw = await readFile(cityHallHistoryPath, "utf-8");
+    const parsed = JSON.parse(raw);
+    const listings = parsed?.listings;
+
+    cityHallListingHistory =
+      listings && typeof listings === "object" ? listings : {};
+  } catch {
+    cityHallListingHistory = {};
+  }
+
+  return cityHallListingHistory;
+}
+
+async function writeCityHallListingHistory(history) {
+  cityHallListingHistory = history;
+
+  await mkdir(dirname(cityHallHistoryPath), { recursive: true });
+  await writeFile(
+    cityHallHistoryPath,
+    JSON.stringify(
+      {
+        updatedAt: new Date().toISOString(),
+        listings: history,
+      },
+      null,
+      2,
+    ),
+    "utf-8",
+  );
+}
+
+async function applyApproximateListingDates(payload) {
+  const sales = Array.isArray(payload?.sales) ? payload.sales : [];
+  const history = await readCityHallListingHistory();
+  const nextHistory = {};
+  const nowIso = new Date().toISOString();
+
+  const normalizedSales = sales.map((sale) => {
+    const trackingKey = toSafeText(
+      sale.trackingKey,
+      `legacy:${toSafeText(sale.id, "unknown")}`,
+    );
+    const knownListedAt =
+      typeof history[trackingKey] === "string" ? history[trackingKey] : null;
+
+    const listedAt = sale.listedAt ?? knownListedAt ?? nowIso;
+    nextHistory[trackingKey] = listedAt;
+
+    const { trackingKey: _internalTrackingKey, ...cleanSale } = sale;
+    return {
+      ...cleanSale,
+      listedAt,
+    };
+  });
+
+  const prevKeys = Object.keys(history).sort();
+  const nextKeys = Object.keys(nextHistory).sort();
+
+  let hasChanged = prevKeys.length !== nextKeys.length;
+  if (!hasChanged) {
+    for (let i = 0; i < nextKeys.length; i += 1) {
+      const key = nextKeys[i];
+      if (prevKeys[i] !== key || history[key] !== nextHistory[key]) {
+        hasChanged = true;
+        break;
+      }
+    }
+  }
+
+  if (hasChanged) {
+    await writeCityHallListingHistory(nextHistory);
+  }
+
+  return {
+    ...payload,
+    sales: normalizedSales,
+  };
+}
+
 function parseCityHallSales(rawJson) {
   const empty = {
     available: false,
@@ -461,7 +569,7 @@ function parseCityHallSales(rawJson) {
     );
     const enchantments = parseEnchantments(entry);
 
-    normalized.push({
+    const normalizedSale = {
       id: toSafeText(entry.id ?? entry.uuid ?? i, String(i)),
       seller,
       itemName,
@@ -472,6 +580,11 @@ function parseCityHallSales(rawJson) {
       listedAt,
       expiresAt,
       enchantments,
+    };
+
+    normalized.push({
+      ...normalizedSale,
+      trackingKey: buildCityHallTrackingKey(entry, normalizedSale),
     });
   }
 
@@ -622,7 +735,9 @@ async function fetchCityHallSalesFromSftp() {
   const privateKeyPath = process.env.SFTP_PRIVATE_KEY_PATH;
   const passphrase = process.env.SFTP_PASSPHRASE;
   const jsonPath =
-    process.env.ECONOMY_CITYHALL_JSON_PATH ?? process.env.ECONOMY_HDV_JSON_PATH;
+    process.env.ECONOMY_AUCTION_HOUSE_JSON_PATH ??
+    process.env.ECONOMY_CITYHALL_JSON_PATH ??
+    process.env.ECONOMY_HDV_JSON_PATH;
 
   if (!host || !username || !jsonPath) {
     return {
@@ -686,9 +801,11 @@ async function getCachedCityHallSales() {
   try {
     const payload = await fetchCityHallSalesFromSftp();
     const hydratedPayload = await hydrateCityHallSalesNames(payload);
-    cityHallSalesCached = hydratedPayload;
+    const payloadWithApproxDates =
+      await applyApproximateListingDates(hydratedPayload);
+    cityHallSalesCached = payloadWithApproxDates;
     cityHallSalesCachedAt = now;
-    return hydratedPayload;
+    return payloadWithApproxDates;
   } catch {
     return {
       available: false,
@@ -778,7 +895,7 @@ app.get("/api/server-status", async (req, res) => {
   }
 });
 
-app.get("/api/cityhall-sales", async (req, res) => {
+const handleAuctionHouseSales = async (req, res) => {
   if (unauthorized(req)) {
     return res.status(401).json({ error: "Unauthorized" });
   }
@@ -788,11 +905,14 @@ app.get("/api/cityhall-sales", async (req, res) => {
     return res.json(payload);
   } catch (error) {
     return res.status(500).json({
-      error: "Failed to fetch city hall sales",
+      error: "Failed to fetch auction house sales",
       message: error instanceof Error ? error.message : "Unknown error",
     });
   }
-});
+};
+
+app.get("/api/auction-house-sales", handleAuctionHouseSales);
+app.get("/api/cityhall-sales", handleAuctionHouseSales);
 
 app.listen(port, () => {
   console.log(`[status-api] listening on http://localhost:${port}`);

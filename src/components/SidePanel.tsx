@@ -57,7 +57,7 @@ function SidePanel({
     { key: "dashboard", label: "Dashboard", icon: "dashboard" },
     { key: "craft", label: "Craft", icon: "handyman" },
     { key: "bestiary", label: "Boss", icon: "skull" },
-    { key: "cityhall", label: "Hotel de ville", icon: "storefront" },
+    { key: "auctionhouse", label: "Hotel des ventes", icon: "storefront" },
     { key: "rules", label: "Règlement", icon: "gavel" },
   ];
 
