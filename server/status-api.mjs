@@ -10,11 +10,19 @@ const app = express();
 const port = Number(process.env.STATUS_API_PORT ?? 8787);
 const cacheTtlMs = Number(process.env.STATUS_CACHE_TTL_MS ?? 10000);
 const economyCacheTtlMs = Number(process.env.ECONOMY_CACHE_TTL_MS ?? 900000);
+const playerNameCacheTtlMs = Number(
+  process.env.PLAYER_NAME_CACHE_TTL_MS ?? 86400000,
+);
+const enableMojangNameLookup =
+  (process.env.ENABLE_MOJANG_NAME_LOOKUP ?? "true").toLowerCase() !== "false";
 
 let cached = null;
 let cachedAt = 0;
 let economyCached = null;
 let economyCachedAt = 0;
+let cityHallSalesCached = null;
+let cityHallSalesCachedAt = 0;
+const playerNameCache = new Map();
 
 function toNumber(value) {
   const parsed = Number(value);
@@ -127,6 +135,224 @@ function pickFirstNumber(values) {
     if (number !== null) return number;
   }
   return null;
+}
+
+function toSafeText(value, fallback) {
+  if (value === null || value === undefined) return fallback;
+  const text = String(value).trim();
+  return text.length ? text : fallback;
+}
+
+function isLikelyUuid(value) {
+  return /^[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12}$/i.test(
+    value,
+  );
+}
+
+function toUuidNoHyphen(value) {
+  return value.replace(/-/g, "").toLowerCase();
+}
+
+async function fetchMojangPlayerName(uuidNoHyphen) {
+  const timeoutMs = Number(process.env.MOJANG_TIMEOUT_MS ?? 5000);
+  const controller = new AbortController();
+  const timerId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(
+      `https://sessionserver.mojang.com/session/minecraft/profile/${uuidNoHyphen}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        signal: controller.signal,
+      },
+    );
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const payload = await response.json();
+    const name = toSafeText(payload?.name, "");
+    return name || null;
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timerId);
+  }
+}
+
+async function resolvePlayerName(value) {
+  const raw = toSafeText(value, "");
+  if (!raw || !isLikelyUuid(raw)) {
+    return raw || "Inconnu";
+  }
+
+  if (!enableMojangNameLookup) {
+    return raw;
+  }
+
+  const uuidNoHyphen = toUuidNoHyphen(raw);
+  const cachedValue = playerNameCache.get(uuidNoHyphen);
+  const now = Date.now();
+
+  if (cachedValue && now - cachedValue.cachedAt < playerNameCacheTtlMs) {
+    return cachedValue.name;
+  }
+
+  const resolved = await fetchMojangPlayerName(uuidNoHyphen);
+  const finalName = resolved ?? raw;
+
+  playerNameCache.set(uuidNoHyphen, {
+    name: finalName,
+    cachedAt: now,
+  });
+
+  return finalName;
+}
+
+async function hydrateEconomySummaryNames(economy) {
+  if (!economy?.topPlayer?.name) {
+    return economy;
+  }
+
+  return {
+    ...economy,
+    topPlayer: {
+      ...economy.topPlayer,
+      name: await resolvePlayerName(economy.topPlayer.name),
+    },
+  };
+}
+
+async function hydrateCityHallSalesNames(payload) {
+  const sales = Array.isArray(payload?.sales) ? payload.sales : [];
+  if (!sales.length) {
+    return payload;
+  }
+
+  const uniqueSellers = [...new Set(sales.map((sale) => sale.seller))];
+  const namePairs = await Promise.all(
+    uniqueSellers.map(async (seller) => [
+      seller,
+      await resolvePlayerName(seller),
+    ]),
+  );
+  const sellerNameMap = new Map(namePairs);
+
+  return {
+    ...payload,
+    sales: sales.map((sale) => ({
+      ...sale,
+      seller: sellerNameMap.get(sale.seller) ?? sale.seller,
+    })),
+  };
+}
+
+function parseDateToIso(value) {
+  if (value === null || value === undefined) return null;
+
+  if (typeof value === "number" && Number.isFinite(value)) {
+    const millis = value < 10_000_000_000 ? value * 1000 : value;
+    return new Date(millis).toISOString();
+  }
+
+  if (typeof value === "string") {
+    const fromString = Date.parse(value);
+    if (!Number.isNaN(fromString)) {
+      return new Date(fromString).toISOString();
+    }
+  }
+
+  return null;
+}
+
+function parseCityHallSales(rawJson) {
+  const empty = {
+    available: false,
+    count: 0,
+    updatedAt: new Date().toISOString(),
+    sales: [],
+  };
+
+  if (!rawJson) return empty;
+
+  const sourceEntries = Array.isArray(rawJson)
+    ? rawJson
+    : Array.isArray(rawJson.sales)
+      ? rawJson.sales
+      : Array.isArray(rawJson.listings)
+        ? rawJson.listings
+        : Array.isArray(rawJson.items)
+          ? rawJson.items
+          : [];
+
+  const normalized = [];
+
+  for (let i = 0; i < sourceEntries.length; i += 1) {
+    const entry = sourceEntries[i];
+    if (!entry || typeof entry !== "object") continue;
+
+    const price = pickFirstNumber([
+      entry.price,
+      entry.unitPrice,
+      entry.cost,
+      entry.value,
+      entry.amount,
+      entry.total,
+    ]);
+
+    if (price === null) continue;
+
+    const quantity =
+      pickFirstNumber([
+        entry.quantity,
+        entry.amount,
+        entry.count,
+        entry.stack,
+      ]) ?? 1;
+
+    const seller = toSafeText(
+      entry.seller ?? entry.playerName ?? entry.owner ?? entry.username,
+      "Inconnu",
+    );
+
+    const itemName = toSafeText(
+      entry.itemName ?? entry.item ?? entry.material ?? entry.id,
+      "Objet inconnu",
+    );
+
+    const listedAt = parseDateToIso(
+      entry.listedAt ?? entry.createdAt ?? entry.date ?? entry.timestamp,
+    );
+
+    const expiresAt = parseDateToIso(
+      entry.expiresAt ?? entry.expiration ?? entry.expireAt,
+    );
+
+    normalized.push({
+      id: toSafeText(entry.id ?? entry.uuid ?? i, String(i)),
+      seller,
+      itemName,
+      price,
+      quantity,
+      totalPrice: Math.round(price * quantity * 100) / 100,
+      currency: toSafeText(entry.currency ?? "$", "$"),
+      listedAt,
+      expiresAt,
+    });
+  }
+
+  return {
+    available: normalized.length > 0,
+    count: normalized.length,
+    updatedAt:
+      parseDateToIso(rawJson.updatedAt ?? rawJson.refreshedAt) ??
+      new Date().toISOString(),
+    sales: normalized,
+  };
 }
 
 async function fetchStatusFromAmp() {
@@ -244,15 +470,101 @@ async function getCachedEconomySummary() {
 
   try {
     const economy = await fetchEconomySummaryFromSftp();
-    economyCached = economy;
+    const hydratedEconomy = await hydrateEconomySummaryNames(economy);
+    economyCached = hydratedEconomy;
     economyCachedAt = now;
-    return economy;
+    return hydratedEconomy;
   } catch {
     return {
       available: false,
       accounts: 0,
       totalBalance: 0,
       topPlayer: null,
+    };
+  }
+}
+
+async function fetchCityHallSalesFromSftp() {
+  const host = process.env.SFTP_HOST;
+  const username = process.env.SFTP_USERNAME;
+  const password = process.env.SFTP_PASSWORD;
+  const privateKeyInline = process.env.SFTP_PRIVATE_KEY;
+  const privateKeyPath = process.env.SFTP_PRIVATE_KEY_PATH;
+  const passphrase = process.env.SFTP_PASSPHRASE;
+  const jsonPath =
+    process.env.ECONOMY_CITYHALL_JSON_PATH ?? process.env.ECONOMY_HDV_JSON_PATH;
+
+  if (!host || !username || !jsonPath) {
+    return {
+      available: false,
+      count: 0,
+      updatedAt: new Date().toISOString(),
+      sales: [],
+    };
+  }
+
+  let privateKey = null;
+  if (privateKeyInline) {
+    privateKey = privateKeyInline.replace(/\\n/g, "\n");
+  } else if (privateKeyPath) {
+    privateKey = await readFile(privateKeyPath, "utf-8");
+  }
+
+  if (!password && !privateKey) {
+    return {
+      available: false,
+      count: 0,
+      updatedAt: new Date().toISOString(),
+      sales: [],
+    };
+  }
+
+  const sftp = new SftpClient();
+
+  try {
+    await sftp.connect({
+      host,
+      port: Number(process.env.SFTP_PORT ?? 22),
+      username,
+      ...(privateKey
+        ? {
+            privateKey,
+            ...(passphrase ? { passphrase } : {}),
+          }
+        : { password }),
+      readyTimeout: Number(process.env.SFTP_TIMEOUT_MS ?? 10000),
+    });
+
+    const fileContent = await sftp.get(jsonPath);
+    const text = Buffer.isBuffer(fileContent)
+      ? fileContent.toString("utf-8")
+      : String(fileContent);
+
+    const parsed = JSON.parse(text);
+    return parseCityHallSales(parsed);
+  } finally {
+    await sftp.end();
+  }
+}
+
+async function getCachedCityHallSales() {
+  const now = Date.now();
+  if (cityHallSalesCached && now - cityHallSalesCachedAt < economyCacheTtlMs) {
+    return cityHallSalesCached;
+  }
+
+  try {
+    const payload = await fetchCityHallSalesFromSftp();
+    const hydratedPayload = await hydrateCityHallSalesNames(payload);
+    cityHallSalesCached = hydratedPayload;
+    cityHallSalesCachedAt = now;
+    return hydratedPayload;
+  } catch {
+    return {
+      available: false,
+      count: 0,
+      updatedAt: new Date().toISOString(),
+      sales: [],
     };
   }
 }
@@ -331,6 +643,22 @@ app.get("/api/server-status", async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       error: "Failed to collect server status",
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+});
+
+app.get("/api/cityhall-sales", async (req, res) => {
+  if (unauthorized(req)) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  try {
+    const payload = await getCachedCityHallSales();
+    return res.json(payload);
+  } catch (error) {
+    return res.status(500).json({
+      error: "Failed to fetch city hall sales",
       message: error instanceof Error ? error.message : "Unknown error",
     });
   }

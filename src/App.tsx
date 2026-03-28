@@ -10,6 +10,7 @@ import MobileBottomNav from "./components/MobileBottomNav";
 import SidePanel from "./components/SidePanel";
 import { fetchServerStatus } from "./lib/serverStatus";
 import BestiaryLootdropPage from "./pages/BestiaryLootdropPage";
+import CityHallPage from "./pages/CityHallPage";
 import CraftPage from "./pages/CraftPage";
 import DashboardPage from "./pages/DashboardPage";
 import RulesPage from "./pages/RulesPage";
@@ -24,6 +25,7 @@ function getPageFromHash(): PageKey {
     cleanHash === "dashboard" ||
     cleanHash === "craft" ||
     cleanHash === "bestiary" ||
+    cleanHash === "cityhall" ||
     cleanHash === "rules"
   ) {
     return cleanHash;
@@ -31,6 +33,7 @@ function getPageFromHash(): PageKey {
 
   if (cleanHash === "home") return "dashboard";
   if (cleanHash === "wiki") return "bestiary";
+  if (cleanHash === "hotel-de-ville") return "cityhall";
   if (cleanHash === "reglement") return "rules";
 
   return "dashboard";
@@ -130,6 +133,7 @@ function App() {
     if (page === "dashboard") return "Dashboard";
     if (page === "craft") return "Craft";
     if (page === "bestiary") return "Boss & Loots";
+    if (page === "cityhall") return "Hotel de ville";
     return "Règlement";
   }, [page]);
 
@@ -228,6 +232,7 @@ function App() {
         {page === "dashboard" && <DashboardPage onNavigate={goToPage} />}
         {page === "craft" && <CraftPage />}
         {page === "bestiary" && <BestiaryLootdropPage />}
+        {page === "cityhall" && <CityHallPage />}
         {page === "rules" && <RulesPage />}
       </main>
 
