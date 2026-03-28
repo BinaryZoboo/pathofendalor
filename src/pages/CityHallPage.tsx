@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
+import cityHallHero from "../assets/hdvlostark.jpg";
 import {
   fetchCityHallSales,
   type CityHallSale,
@@ -204,11 +205,11 @@ function CityHallPage() {
     <section className="space-y-8">
       <section className="relative overflow-hidden rounded-3xl border border-(--outline-variant)/50 p-6 md:p-10">
         <img
-          src="https://images.unsplash.com/photo-1556740722-a3051d60e006?auto=format&fit=crop&w=1400&q=80"
+          src={cityHallHero}
           alt="Hotel de ville marketplace"
-          className="absolute inset-0 h-full w-full object-cover opacity-20"
+          className="absolute inset-0 h-full w-full object-cover opacity-28"
         />
-        <div className="absolute inset-0 bg-linear-to-r from-(--background) via-(--background)/84 to-(--background)/45" />
+        <div className="absolute inset-0 bg-linear-to-r from-(--background) via-(--background)/78 to-(--background)/38" />
 
         <div className="relative z-10 max-w-3xl">
           <p className="font-label text-[10px] tracking-[0.24em] text-(--muted)">
