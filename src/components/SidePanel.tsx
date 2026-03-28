@@ -56,7 +56,7 @@ function SidePanel({
   const items: Array<{ key: PageKey; label: string; icon: string }> = [
     { key: "dashboard", label: "Dashboard", icon: "dashboard" },
     { key: "craft", label: "Craft", icon: "handyman" },
-    { key: "bestiary", label: "Bestiaire + Lootdrop", icon: "pets" },
+    { key: "bestiary", label: "Boss", icon: "skull" },
     { key: "rules", label: "Règlement", icon: "gavel" },
   ];
 

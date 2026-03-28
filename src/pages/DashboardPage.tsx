@@ -141,7 +141,7 @@ function DashboardPage({
               onClick={() => onNavigate("bestiary")}
               className="rounded-full border border-(--outline-variant) bg-(--surface-container-low) px-6 py-3 font-label text-[11px] tracking-[0.15em] text-(--on-background) transition hover:border-(--primary)/40"
             >
-              OUVRIR LE BESTIAIRE
+              OUVRIR LES BOSS
             </button>
           </div>
         </div>

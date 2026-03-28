@@ -129,7 +129,7 @@ function App() {
   const pageTitle = useMemo(() => {
     if (page === "dashboard") return "Dashboard";
     if (page === "craft") return "Craft";
-    if (page === "bestiary") return "Bestiaire & Lootdrop";
+    if (page === "bestiary") return "Boss & Loots";
     return "Règlement";
   }, [page]);
 

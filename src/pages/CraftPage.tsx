@@ -49,7 +49,7 @@ function CraftPage() {
         </p>
         <h2 className="mt-2 font-headline text-4xl font-bold md:text-5xl">
           Systeme de craft,
-          <span className="text-(--primary)"> progression par metier.</span>
+          <span className="text-(--primary)"> Devenez qui vous voulez.</span>
         </h2>
       </article>
 
