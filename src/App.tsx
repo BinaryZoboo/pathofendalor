@@ -4,11 +4,14 @@ import HeaderRainParticles from "./components/HeaderRainParticles";
 import MobileBottomNav from "./components/MobileBottomNav";
 import SidePanel from "./components/SidePanel";
 import { fetchServerStatus } from "./lib/serverStatus";
-import AuctionHousePage from "./pages/AuctionHousePage";
-import BestiaryLootdropPage from "./pages/BestiaryLootdropPage";
-import CraftPage from "./pages/CraftPage";
-import DashboardPage from "./pages/DashboardPage";
-import RulesPage from "./pages/RulesPage";
+import {
+  AuctionHousePage,
+  BestiaryLootdropPage,
+  ClassesPage,
+  CraftPage,
+  DashboardPage,
+  RulesPage,
+} from "./pages";
 import { type PageKey } from "./types/navigation";
 
 type ThemeKey = "dark" | "light";
@@ -17,6 +20,7 @@ type PageContext = { subtitle: string; tag: string };
 const PAGE_TITLES: Record<PageKey, string> = {
   dashboard: "Dashboard",
   craft: "Craft",
+  classes: "Classes",
   bestiary: "Boss & Loots",
   auctionhouse: "Hotel des ventes",
   rules: "Reglement",
@@ -28,8 +32,13 @@ const PAGE_CONTEXT: Record<PageKey, PageContext> = {
     tag: "VUE GLOBALE",
   },
   craft: {
-    subtitle: "Repere rapidement les recettes et priorites de progression.",
+    subtitle:
+      "Repere rapidement les crafts importants et la feuille de route progression.",
     tag: "ARTISANAT",
+  },
+  classes: {
+    subtitle: "Compare les roles et synergies pour composer ton equipe.",
+    tag: "CLASSES",
   },
   bestiary: {
     subtitle: "Consulte les menaces et les loots avant de lancer un raid.",
@@ -51,6 +60,7 @@ function getPageFromHash(): PageKey {
   if (
     cleanHash === "dashboard" ||
     cleanHash === "craft" ||
+    cleanHash === "classes" ||
     cleanHash === "bestiary" ||
     cleanHash === "auctionhouse" ||
     cleanHash === "rules"
@@ -59,6 +69,7 @@ function getPageFromHash(): PageKey {
   }
 
   if (cleanHash === "home") return "dashboard";
+  if (cleanHash === "class") return "classes";
   if (cleanHash === "wiki") return "bestiary";
   if (cleanHash === "hotel-des-ventes" || cleanHash === "cityhall") {
     return "auctionhouse";
@@ -219,6 +230,7 @@ function App() {
 
         {page === "dashboard" && <DashboardPage onNavigate={goToPage} />}
         {page === "craft" && <CraftPage />}
+        {page === "classes" && <ClassesPage />}
         {page === "bestiary" && <BestiaryLootdropPage />}
         {page === "auctionhouse" && <AuctionHousePage />}
         {page === "rules" && <RulesPage />}

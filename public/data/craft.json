@@ -1,0 +1,103 @@
+{
+  "updatedAt": "2026-04-01",
+  "hero": {
+    "eyebrow": "ATELIERS ET ARTISANAT",
+    "title": "Craft prioritaire",
+    "highlight": " pour progression rapide"
+  },
+  "workflow": [
+    {
+      "id": "farm",
+      "title": "1. Farm cible",
+      "description": "Concentre la recolte sur les composants qui servent plusieurs recettes de progression.",
+      "icon": "landscape"
+    },
+    {
+      "id": "transform",
+      "title": "2. Stations",
+      "description": "Enchaine forge, alchimie et enchantement pour convertir tes ressources sans perte.",
+      "icon": "build"
+    },
+    {
+      "id": "optimize",
+      "title": "3. Optimisation",
+      "description": "Priorise les crafts qui augmentent directement ton DPS, ta survie ou ton utility raid.",
+      "icon": "bolt"
+    }
+  ],
+  "priorityCrafts": [
+    {
+      "id": "blade-endalium",
+      "name": "Lame d'Endalium",
+      "station": "Forge",
+      "tier": "S",
+      "icon": "swords",
+      "benefit": "+DPS mono-cible, excellent early raid",
+      "ingredients": [
+        "8x Lingot d'endalium",
+        "2x Noyau infernal",
+        "1x Catalyseur ancien"
+      ],
+      "notes": "A prioriser avant les premiers boss eleves."
+    },
+    {
+      "id": "awakening-potion",
+      "name": "Potion d'eveil",
+      "station": "Alchimie",
+      "tier": "A",
+      "icon": "science",
+      "benefit": "Buff burst sur fenetre courte",
+      "ingredients": [
+        "4x Herbier lunaire",
+        "1x Essence necrotique",
+        "1x Fiole cristalline"
+      ],
+      "notes": "Tres rentable pour progression boss et speed run donjons."
+    },
+    {
+      "id": "rune-bulwark",
+      "name": "Rune de Bastion",
+      "station": "Runes",
+      "tier": "A",
+      "icon": "shield",
+      "benefit": "+Survie et reduction des pics de degats",
+      "ingredients": [
+        "3x Fragment runique",
+        "2x Coeur petrifie",
+        "1x Orbe gardienne"
+      ],
+      "notes": "Utile pour classes frontline et raids a mecaniques lourdes."
+    },
+    {
+      "id": "focus-emblem",
+      "name": "Embleme de Focus",
+      "station": "Enchantement",
+      "tier": "B",
+      "icon": "auto_awesome",
+      "benefit": "Stabilise regen mana/energie sur combats longs",
+      "ingredients": [
+        "6x Poussiere astrale",
+        "1x Noyau arcanique",
+        "2x Gemme stable"
+      ],
+      "notes": "Bon investissement pour builds mage/support."
+    }
+  ],
+  "stationTips": [
+    {
+      "station": "Forge",
+      "icon": "hardware",
+      "tip": "Transforme en lot pour limiter les pertes de composants rares."
+    },
+    {
+      "station": "Alchimie",
+      "icon": "biotech",
+      "tip": "Reserve les catalysts premium aux combats de progression."
+    },
+    {
+      "station": "Enchantement",
+      "icon": "flare",
+      "tip": "Verrouille un objectif de stat principal avant les rerolls."
+    }
+  ]
+}

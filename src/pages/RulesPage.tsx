@@ -716,7 +716,7 @@ function RulesPage() {
                 className={`rules-accept-btn-loader ${isHoldingAccept ? "is-active" : ""}`}
                 aria-hidden="true"
               />
-              <span className="relative z-[1]">
+              <span className="relative z-1">
                 {hasAcceptedRules
                   ? "REGLEMENT ACCEPTE"
                   : isHoldingAccept

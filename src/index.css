@@ -974,6 +974,10 @@ html {
   mix-blend-mode: lighten;
 }
 
+.header-rain-particles-classes .header-rain-particle {
+  mix-blend-mode: screen;
+}
+
 .header-rain-particles-rules .header-rain-particle {
   mix-blend-mode: plus-lighter;
 }
@@ -1051,5 +1055,120 @@ html {
     box-shadow:
       0 0 10px rgba(239, 68, 68, 0.55),
       0 0 22px rgba(239, 68, 68, 0.45);
+  }
+}
+
+.classes-deck-shell {
+  position: relative;
+  overflow: visible;
+  border-radius: 1rem;
+  outline: none;
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-y;
+}
+
+.classes-deck-shell.is-dragging {
+  cursor: grabbing;
+}
+
+.classes-deck-controls {
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.classes-deck-stage {
+  position: relative;
+  min-height: 23rem;
+  display: grid;
+  place-items: center;
+  perspective: 1200px;
+}
+
+.classes-deck-card {
+  position: absolute;
+  width: min(90vw, 44rem);
+  cursor: pointer;
+  transition:
+    transform 240ms ease,
+    opacity 240ms ease,
+    filter 240ms ease;
+}
+
+.classes-deck-card.is-active {
+  z-index: 5;
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+.classes-deck-card.is-prev {
+  z-index: 4;
+  opacity: 0.76;
+  transform: translateX(-22%) scale(0.9) rotateY(16deg);
+  filter: blur(0.2px) saturate(0.82);
+}
+
+.classes-deck-card.is-next {
+  z-index: 4;
+  opacity: 0.76;
+  transform: translateX(22%) scale(0.9) rotateY(-16deg);
+  filter: blur(0.2px) saturate(0.82);
+}
+
+.classes-deck-card.is-prev-2 {
+  z-index: 2;
+  opacity: 0.24;
+  transform: translateX(-34%) scale(0.82) rotateY(24deg);
+  filter: blur(0.8px) saturate(0.72);
+}
+
+.classes-deck-card.is-next-2 {
+  z-index: 2;
+  opacity: 0.24;
+  transform: translateX(34%) scale(0.82) rotateY(-24deg);
+  filter: blur(0.8px) saturate(0.72);
+}
+
+.classes-deck-card.is-hidden {
+  z-index: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(0) scale(0.78);
+  filter: blur(1.2px) saturate(0.65);
+}
+
+@media (max-width: 1024px) {
+  .classes-deck-stage {
+    min-height: 25rem;
+  }
+
+  .classes-deck-card.is-prev {
+    transform: translateX(-10%) scale(0.95);
+  }
+
+  .classes-deck-card.is-next {
+    transform: translateX(10%) scale(0.95);
+  }
+
+  .classes-deck-card.is-prev-2,
+  .classes-deck-card.is-next-2 {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .classes-deck-stage {
+    min-height: 28rem;
+  }
+
+  .classes-deck-card.is-prev,
+  .classes-deck-card.is-next {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(0) scale(0.96);
   }
 }

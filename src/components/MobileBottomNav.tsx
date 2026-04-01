@@ -10,6 +10,7 @@ function MobileBottomNav({
   const items: Array<{ key: PageKey; label: string; icon: string }> = [
     { key: "dashboard", label: "Dashboard", icon: "dashboard" },
     { key: "craft", label: "Craft", icon: "handyman" },
+    { key: "classes", label: "Classes", icon: "diversity_3" },
     { key: "bestiary", label: "Boss", icon: "skull" },
     { key: "auctionhouse", label: "Hotel", icon: "storefront" },
     { key: "rules", label: "Regles", icon: "gavel" },
@@ -17,7 +18,7 @@ function MobileBottomNav({
 
   return (
     <nav className="premium-surface fixed inset-x-3 bottom-3 z-50 rounded-2xl p-2 backdrop-blur-md lg:hidden">
-      <div className="grid grid-cols-5 gap-2">
+      <div className="grid grid-cols-6 gap-2">
         {items.map((item) => {
           const isActive = item.key === activePage;
           return (

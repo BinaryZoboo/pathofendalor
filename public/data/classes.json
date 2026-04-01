@@ -1,0 +1,73 @@
+{
+  "updatedAt": "2026-04-01",
+  "isProvisional": false,
+  "notice": "Classes officielles RGP Series.",
+  "classes": [
+    {
+      "id": "wizards",
+      "name": "Wizards",
+      "role": "DPS magique",
+      "icon": "auto_fix_high",
+      "difficulty": "Moyenne",
+      "strengths": ["Burst magique", "Bonne pression de zone"],
+      "weaknesses": ["Fragile", "Depend de la gestion mana"],
+      "playstyle": "Controle la distance et applique des pics de degats magiques.",
+      "synergies": ["Paladins", "Priests"]
+    },
+    {
+      "id": "paladins",
+      "name": "Paladins",
+      "role": "Tank / Support",
+      "icon": "shield",
+      "difficulty": "Moyenne",
+      "strengths": ["Grande survie", "Protection de groupe"],
+      "weaknesses": ["Mobilite limitee", "Degats moderes"],
+      "playstyle": "Tient la front line et securise les phases a risques.",
+      "synergies": ["Wizards", "Archers", "Priests"]
+    },
+    {
+      "id": "rogues",
+      "name": "Rogues",
+      "role": "Assassin",
+      "icon": "swords",
+      "difficulty": "Elevee",
+      "strengths": ["Tres fort mono-cible", "Grande mobilite"],
+      "weaknesses": ["Faible defense", "Punissable hors cooldown"],
+      "playstyle": "Cherche les ouvertures courtes pour executer les cibles cle.",
+      "synergies": ["Priests", "Paladins"]
+    },
+    {
+      "id": "warriors",
+      "name": "Warriors",
+      "role": "DPS melee",
+      "icon": "swords",
+      "difficulty": "Faible",
+      "strengths": ["Pression constante", "Gameplay direct"],
+      "weaknesses": ["Portee courte", "Dependant du placement"],
+      "playstyle": "Reste au contact pour maintenir un DPS soutenu.",
+      "synergies": ["Priests", "Paladins"]
+    },
+    {
+      "id": "priests",
+      "name": "Priests",
+      "role": "Support",
+      "icon": "healing",
+      "difficulty": "Moyenne",
+      "strengths": ["Sustain equipe", "Utilitaire raid"],
+      "weaknesses": ["Impact solo limite", "Vulnerable si focus"],
+      "playstyle": "Maintient le groupe stable et optimise la duree des combats.",
+      "synergies": ["Paladins", "Warriors", "Rogues"]
+    },
+    {
+      "id": "archers",
+      "name": "Archers",
+      "role": "DPS distance",
+      "icon": "my_location",
+      "difficulty": "Moyenne",
+      "strengths": ["Kite efficace", "Degats constants"],
+      "weaknesses": ["Fragile au melee", "Demande un bon positionnement"],
+      "playstyle": "Joue a distance pour eliminer les cibles vulnerables.",
+      "synergies": ["Paladins", "Priests"]
+    }
+  ]
+}

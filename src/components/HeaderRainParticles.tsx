@@ -32,6 +32,10 @@ const PAGE_PARTICLE_THEME: Record<PageKey, ParticleTheme> = {
     colors: ["#f59e0b", "#fb7185", "#f97316", "#facc15"],
     shapes: ["square", "diamond", "square", "streak"],
   },
+  classes: {
+    colors: ["#a78bfa", "#22d3ee", "#34d399", "#f59e0b"],
+    shapes: ["diamond", "round", "square", "streak"],
+  },
   bestiary: {
     colors: ["#f43f5e", "#ef4444", "#f97316", "#f59e0b"],
     shapes: ["diamond", "round", "streak", "diamond"],
