@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
+import PageHero from "../components/PageHero";
+
 type ClassEntry = {
   id: string;
   name: string;
@@ -458,30 +460,12 @@ function ClassesPage() {
 
   return (
     <section className="space-y-6">
-      <article className="premium-surface shimmer-border fade-in-up rounded-3xl p-6 md:p-8">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-(--primary)">
-              diversity_3
-            </span>
-            <p className="font-label text-[10px] tracking-[0.22em] text-(--muted)">
-              CLASSES ET ROLES
-            </p>
-          </div>
-          <span className="game-chip rounded-full px-2.5 py-1 font-label text-[10px] tracking-[0.14em] text-(--muted)">
-            MAJ {classesData.updatedAt}
-          </span>
-        </div>
-
-        <h2 className="mt-2 font-headline text-4xl font-bold md:text-5xl">
-          Presentation des classes,
-          <span className="hero-gradient-text"> synergies incluses</span>
-        </h2>
-        <p className="mt-3 max-w-3xl text-sm text-(--muted)">
-          Vue pratique des roles pour preparer une composition de groupe adaptee
-          au contenu vise.
-        </p>
-      </article>
+      <PageHero
+        badge="CLASSES ET ROLES"
+        title="Presentation des classes,"
+        highlight="synergies incluses"
+        description="Vue pratique des roles pour preparer une composition de groupe adaptee au contenu vise."
+      />
 
       {classesData.isProvisional && (
         <div className="game-panel rounded-2xl border border-amber-300/35 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">

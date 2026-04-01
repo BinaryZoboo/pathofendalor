@@ -6,6 +6,8 @@ import {
   useState,
 } from "react";
 
+import PageHero from "../components/PageHero";
+
 type RuleSeverity = "info" | "warning" | "strict";
 type RuleCategory = "respect" | "economy" | "combat" | "build";
 
@@ -504,24 +506,13 @@ function RulesPage() {
 
   return (
     <section className="space-y-6">
-      <article className="premium-surface shimmer-border relative overflow-hidden rounded-3xl p-6 md:p-8">
-        <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-(--primary)/16 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-24 -left-14 h-64 w-64 rounded-full bg-(--secondary)/12 blur-3xl" />
-
-        <div className="relative z-10">
-          <p className="font-label text-[10px] tracking-[0.22em] text-(--muted)">
-            REGLEMENT OFFICIEL
-          </p>
-          <h2 className="mt-2 font-headline text-4xl font-bold tracking-tight md:text-5xl">
-            Un gameplay propre,
-            <span className="hero-gradient-text block"> zero abus.</span>
-          </h2>
-          <p className="mt-4 max-w-2xl text-sm text-(--muted)">
-            Ces regles maintiennent un serveur stable, juste et competitif.
-            Respecte-les pour proteger l'experience de toute la communaute.
-          </p>
-
-          <div className="mt-5 flex flex-wrap gap-3">
+      <PageHero
+        badge="REGLEMENT OFFICIEL"
+        title="Un gameplay propre,"
+        highlight="zero abus."
+        description="Ces regles maintiennent un serveur stable, juste et competitif. Respecte-les pour proteger l'experience de toute la communaute."
+        actions={
+          <>
             <a
               href="#liste-regles"
               className="game-chip game-chip-active rounded-full px-5 py-2.5 font-label text-[11px] tracking-[0.15em] text-(--on-background) transition hover:-translate-y-px"
@@ -534,9 +525,9 @@ function RulesPage() {
             >
               FILTRES
             </a>
-          </div>
-        </div>
-      </article>
+          </>
+        }
+      />
 
       <div className="hud-divider" />
 

@@ -1,4 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+
+import PageHero from "../components/PageHero";
 
 type CraftWorkflowStep = {
   id: string;
@@ -234,75 +236,20 @@ function CraftPage() {
     };
   }, []);
 
-  const topTierCount = useMemo(() => {
-    return craftData.priorityCrafts.filter(
-      (craft) => craft.tier === "S" || craft.tier === "A",
-    ).length;
-  }, [craftData.priorityCrafts]);
-
   return (
     <section className="space-y-6">
-      <article className="premium-surface shimmer-border fade-in-up rounded-3xl p-6 md:p-8">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-(--primary)">
-              construction
-            </span>
-            <p className="font-label text-[10px] tracking-[0.22em] text-(--muted)">
-              {craftData.hero.eyebrow}
-            </p>
-          </div>
-          <span className="game-chip rounded-full px-2.5 py-1 font-label text-[10px] tracking-[0.14em] text-(--muted)">
-            MAJ {craftData.updatedAt}
-          </span>
-        </div>
-
-        <h2 className="mt-2 font-headline text-4xl font-bold md:text-5xl">
-          {craftData.hero.title}
-          <span className="hero-gradient-text">{craftData.hero.highlight}</span>
-        </h2>
-        <p className="mt-3 max-w-3xl text-sm text-(--muted)">
-          Focus sur les crafts a fort impact pour gagner du temps de progression
-          et optimiser les ressources rares.
-        </p>
-      </article>
+      <PageHero
+        badge={craftData.hero.eyebrow}
+        title={craftData.hero.title}
+        highlight={craftData.hero.highlight}
+        description="Focus sur les crafts a fort impact pour gagner du temps de progression et optimiser les ressources rares."
+      />
 
       {craftError && (
         <div className="game-panel rounded-2xl border border-amber-300/35 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
           {craftError}
         </div>
       )}
-
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <article className="game-panel premium-lift rounded-2xl p-5">
-          <p className="font-label text-[10px] tracking-[0.14em] text-(--muted)">
-            CRAFTS PRIORITAIRES
-          </p>
-          <p className="mt-2 font-headline text-3xl font-bold">
-            {craftData.priorityCrafts.length}
-          </p>
-        </article>
-
-        <article className="game-panel premium-lift rounded-2xl p-5">
-          <p className="font-label text-[10px] tracking-[0.14em] text-(--muted)">
-            TIERS S / A
-          </p>
-          <p className="mt-2 font-headline text-3xl font-bold text-(--primary)">
-            {topTierCount}
-          </p>
-        </article>
-
-        <article className="game-panel premium-lift rounded-2xl p-5">
-          <p className="font-label text-[10px] tracking-[0.14em] text-(--muted)">
-            STATIONS CLE
-          </p>
-          <p className="mt-2 font-headline text-3xl font-bold">
-            {craftData.stationTips.length}
-          </p>
-        </article>
-      </section>
-
-      <div className="hud-divider" />
 
       <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {craftData.workflow.map((step) => (
@@ -320,6 +267,7 @@ function CraftPage() {
           </article>
         ))}
       </section>
+      <div className="hud-divider" />
 
       <section className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
@@ -397,28 +345,6 @@ function CraftPage() {
           </article>
         ))}
       </section>
-
-      <article className="game-panel rounded-2xl border border-(--outline-variant)/80 p-5">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p className="font-label text-[10px] tracking-[0.16em] text-(--muted)">
-              BUILD PREPARATION
-            </p>
-            <p className="mt-1 text-sm text-(--muted)">
-              Les classes sont maintenant detaillees sur une page dediee pour
-              une lecture plus claire des roles et synergies.
-            </p>
-          </div>
-          <button
-            onClick={() => {
-              window.location.hash = "classes";
-            }}
-            className="game-chip game-chip-active premium-lift rounded-full px-4 py-2 font-label text-[10px] tracking-[0.14em]"
-          >
-            OUVRIR CLASSES
-          </button>
-        </div>
-      </article>
     </section>
   );
 }

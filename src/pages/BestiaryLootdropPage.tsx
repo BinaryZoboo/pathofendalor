@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 
+import PageHero from "../components/PageHero";
+
 type BossEntry = {
   name: string;
   titre: string;
@@ -451,28 +453,14 @@ function BestiaryLootdropPage() {
 
   return (
     <section className="space-y-6">
-      <article className="glass-panel shimmer-border relative overflow-hidden rounded-3xl border border-(--outline-variant)/50 p-6 md:p-8">
-        <img
-          src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1600&q=80"
-          alt="Boss de Path of Endalor"
-          className="absolute inset-0 h-full w-full object-cover opacity-20"
-        />
-        <div className="absolute inset-0 bg-linear-to-r from-(--background) via-(--background)/70 to-transparent" />
-
-        <div className="relative z-10 max-w-3xl">
-          <span className="inline-flex rounded-full bg-(--primary)/15 px-3 py-1 font-label text-[10px] tracking-[0.16em] text-(--primary)">
-            BESTIAIRE STRATEGIQUE
-          </span>
-          <h2 className="mt-3 font-headline text-2xl font-bold tracking-tight md:text-4xl">
-            Boss, niveaux de menace et table de loots premium
-          </h2>
-          <p className="mt-3 text-(--muted)">
-            Selectionne une zone ou un niveau de menace pour afficher la
-            meilleure cible de farm, puis priorise les livres enchantes marques
-            critiques.
-          </p>
-        </div>
-      </article>
+      <PageHero
+        badge="BESTIAIRE STRATEGIQUE"
+        title="Boss, niveaux de menace et table de loots"
+        highlight="premium"
+        description="Selectionne une zone ou un niveau de menace pour afficher la meilleure cible de farm, puis priorise les livres enchantes marques critiques."
+        imageSrc="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1600&q=80"
+        imageAlt="Boss de Path of Endalor"
+      />
 
       <article className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatLine

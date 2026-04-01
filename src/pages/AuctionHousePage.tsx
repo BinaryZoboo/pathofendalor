@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import auctionHouseHero from "../assets/hdvlostark.jpg";
+import PageHero from "../components/PageHero";
 import {
   fetchAuctionHouseSales,
   type AuctionHouseSale,
@@ -242,39 +243,24 @@ function AuctionHousePage() {
 
   return (
     <section className="space-y-8">
-      <section className="premium-surface shimmer-border relative overflow-hidden rounded-3xl p-6 md:p-10">
-        <img
-          src={auctionHouseHero}
-          alt="Hotel des ventes marketplace"
-          className="absolute inset-0 h-full w-full object-cover opacity-28"
-        />
-        <div className="absolute inset-0 bg-linear-to-r from-(--background) via-(--background)/78 to-(--background)/38" />
-
-        <div className="relative z-10 max-w-3xl">
-          <p className="font-label text-[10px] tracking-[0.24em] text-(--muted)">
-            ECONOMYCRAFT // MARKET FEED
-          </p>
-          <h2 className="mt-3 font-headline text-4xl font-bold tracking-tight md:text-6xl">
-            Hotel des ventes
-            <span className="hero-gradient-text block">
-              place de marche live
-            </span>
-          </h2>
-          <p className="mt-4 max-w-2xl text-(--muted)">
-            Tous les objets en vente des joueurs avec tri instantane, recherche
-            rapide et vue claire des prix du serveur.
-          </p>
-
-          <div className="mt-6 flex flex-wrap items-center gap-3">
+      <PageHero
+        badge="ECONOMYCRAFT // MARKET FEED"
+        title="Hotel des ventes"
+        highlight="place de marche live"
+        description="Tous les objets en vente des joueurs avec tri instantane, recherche rapide et vue claire des prix du serveur."
+        imageSrc={auctionHouseHero}
+        imageAlt="Hotel des ventes marketplace"
+        actions={
+          <>
             <span className="rounded-full border border-(--primary)/35 bg-(--primary)/12 px-4 py-2 font-label text-[10px] tracking-[0.16em] text-(--primary)">
               {numberFormatter.format(totalListings)} ANNONCES
             </span>
             <span className="rounded-full border border-(--outline-variant) bg-(--surface-container-low) px-4 py-2 font-label text-[10px] tracking-[0.16em] text-(--muted)">
               MAJ {formatDateLabel(payload?.updatedAt ?? null)}
             </span>
-          </div>
-        </div>
-      </section>
+          </>
+        }
+      />
 
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <MetricCard

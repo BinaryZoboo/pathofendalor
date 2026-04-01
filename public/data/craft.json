@@ -27,46 +27,46 @@
   ],
   "priorityCrafts": [
     {
-      "id": "blade-endalium",
-      "name": "Lame d'Endalium",
-      "station": "Forge",
-      "tier": "S",
-      "icon": "swords",
-      "benefit": "+DPS mono-cible, excellent early raid",
+      "id": "focus-emblem",
+      "name": "Embleme de Focus",
+      "station": "Enchantement",
+      "tier": "B",
+      "icon": "auto_awesome",
+      "benefit": "Stabilise regen mana/energie sur combats longs",
       "ingredients": [
-        "8x Lingot d'endalium",
-        "2x Noyau infernal",
-        "1x Catalyseur ancien"
+        "6x Poussiere astrale",
+        "1x Noyau arcanique",
+        "2x Gemme stable"
       ],
-      "notes": "A prioriser avant les premiers boss eleves."
+      "notes": "Bon investissement pour builds mage/support."
     },
     {
-      "id": "awakening-potion",
-      "name": "Potion d'eveil",
-      "station": "Alchimie",
-      "tier": "A",
-      "icon": "science",
-      "benefit": "Buff burst sur fenetre courte",
+      "id": "focus-emblem",
+      "name": "Embleme de Focus",
+      "station": "Enchantement",
+      "tier": "B",
+      "icon": "auto_awesome",
+      "benefit": "Stabilise regen mana/energie sur combats longs",
       "ingredients": [
-        "4x Herbier lunaire",
-        "1x Essence necrotique",
-        "1x Fiole cristalline"
+        "6x Poussiere astrale",
+        "1x Noyau arcanique",
+        "2x Gemme stable"
       ],
-      "notes": "Tres rentable pour progression boss et speed run donjons."
+      "notes": "Bon investissement pour builds mage/support."
     },
     {
-      "id": "rune-bulwark",
-      "name": "Rune de Bastion",
-      "station": "Runes",
-      "tier": "A",
-      "icon": "shield",
-      "benefit": "+Survie et reduction des pics de degats",
+      "id": "focus-emblem",
+      "name": "Embleme de Focus",
+      "station": "Enchantement",
+      "tier": "B",
+      "icon": "auto_awesome",
+      "benefit": "Stabilise regen mana/energie sur combats longs",
       "ingredients": [
-        "3x Fragment runique",
-        "2x Coeur petrifie",
-        "1x Orbe gardienne"
+        "6x Poussiere astrale",
+        "1x Noyau arcanique",
+        "2x Gemme stable"
       ],
-      "notes": "Utile pour classes frontline et raids a mecaniques lourdes."
+      "notes": "Bon investissement pour builds mage/support."
     },
     {
       "id": "focus-emblem",

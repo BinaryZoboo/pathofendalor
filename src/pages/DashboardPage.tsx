@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { type PageKey } from "../types/navigation";
 
+import PageHero from "../components/PageHero";
 import {
   fetchServerStatus,
   type ServerStatusResponse,
@@ -94,29 +95,15 @@ function DashboardPage({
 
   return (
     <section className="space-y-8">
-      <section className="premium-surface shimmer-border relative overflow-hidden rounded-3xl p-6 md:p-10">
-        <img
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyDfSOO526036zRIGI7vyNLKLDM6cC2Qbpd5_XjXQ-ielHFjoV40pfReigMYoMUxDhNpsP_8XIIhdbiBp1Sk_AHDGdgfddbrtS47zWu4WDXwKvzCknDlL4-rHFP73PLI8XLHT1Ywlk0FOwzA7FYsnr-JxfLZf2fIioGsRQy7KdGwZUrsMQbeZyXzNCNm20NE9CIeaTJWBot6k7XLsgY0CPULpn4EbtI_JYHoGuOng1q0vgr6UWySs_K_KaoQkeIb3S1e89Pge0Jl0"
-          alt="Path Of Endalor"
-          className="absolute inset-0 h-full w-full object-cover opacity-30"
-        />
-        <div className="absolute inset-0 bg-linear-to-r from-(--background) via-(--background)/78 to-transparent" />
-
-        <div className="relative z-10 max-w-3xl">
-          <p className="font-label text-[10px] tracking-[0.25em] text-(--muted)">
-            NOUVELLE SAISON EN LIGNE
-          </p>
-          <h2 className="mt-3 font-headline text-4xl font-bold tracking-tight md:text-6xl">
-            Un serveur RPG moderne
-            <span className="hero-gradient-text block">
-              concu pour la competition.
-            </span>
-          </h2>
-          <p className="mt-4 max-w-2xl text-(--muted)">
-            Nouveau hub visuel, meilleure lisibilite et navigation rapide. Le
-            style est plus premium, plus propre, et utile pour l'aventure.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-3">
+      <PageHero
+        badge="NOUVELLE SAISON EN LIGNE"
+        title="Un serveur RPG moderne"
+        highlight="concu pour la competition."
+        description="Nouveau hub visuel, meilleure lisibilite et navigation rapide. Le style est plus premium, plus propre, et utile pour l'aventure."
+        imageSrc="https://lh3.googleusercontent.com/aida-public/AB6AXuDyDfSOO526036zRIGI7vyNLKLDM6cC2Qbpd5_XjXQ-ielHFjoV40pfReigMYoMUxDhNpsP_8XIIhdbiBp1Sk_AHDGdgfddbrtS47zWu4WDXwKvzCknDlL4-rHFP73PLI8XLHT1Ywlk0FOwzA7FYsnr-JxfLZf2fIioGsRQy7KdGwZUrsMQbeZyXzNCNm20NE9CIeaTJWBot6k7XLsgY0CPULpn4EbtI_JYHoGuOng1q0vgr6UWySs_K_KaoQkeIb3S1e89Pge0Jl0"
+        imageAlt="Path Of Endalor"
+        actions={
+          <>
             <button className="game-chip game-chip-active rounded-full px-6 py-3 font-label text-[11px] tracking-[0.15em] text-(--on-background) shadow-[0_0_20px_var(--ring-glow)] transition hover:-translate-y-px">
               REJOINDRE
             </button>
@@ -126,9 +113,9 @@ function DashboardPage({
             >
               BOSS INFOS
             </button>
-          </div>
-        </div>
-      </section>
+          </>
+        }
+      />
 
       <div className="hud-divider" />
 
