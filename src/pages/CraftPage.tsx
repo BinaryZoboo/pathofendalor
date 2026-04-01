@@ -8,7 +8,7 @@ function CraftStep({
   icon: string;
 }) {
   return (
-    <article className="rounded-2xl border border-(--outline-variant)/45 bg-(--surface-container-low) p-5">
+    <article className="game-panel premium-lift rounded-2xl p-5">
       <span className="material-symbols-outlined text-(--primary)">{icon}</span>
       <h3 className="mt-2 font-headline text-2xl font-bold">{title}</h3>
       <p className="mt-2 text-sm text-(--muted)">{description}</p>
@@ -26,7 +26,7 @@ function RecipeCard({
   ingredients: string[];
 }) {
   return (
-    <article className="rounded-2xl border border-(--outline-variant)/45 bg-(--surface-container-high) p-5">
+    <article className="game-panel premium-lift rounded-2xl p-5">
       <p className="font-label text-[10px] tracking-[0.14em] text-(--primary)">
         {station}
       </p>
@@ -43,15 +43,17 @@ function RecipeCard({
 function CraftPage() {
   return (
     <section className="space-y-6">
-      <article className="rounded-3xl border border-(--outline-variant)/45 bg-(--surface-container-low) p-6 md:p-8">
+      <article className="premium-surface shimmer-border rounded-3xl p-6 md:p-8">
         <p className="font-label text-[10px] tracking-[0.22em] text-(--muted)">
           ATELIERS ET ARTISANAT
         </p>
         <h2 className="mt-2 font-headline text-4xl font-bold md:text-5xl">
           Systeme de craft,
-          <span className="text-(--primary)"> Devenez qui vous voulez.</span>
+          <span className="hero-gradient-text"> Devenez qui vous voulez.</span>
         </h2>
       </article>
+
+      <div className="hud-divider" />
 
       <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <CraftStep

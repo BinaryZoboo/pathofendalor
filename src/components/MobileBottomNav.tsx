@@ -16,7 +16,7 @@ function MobileBottomNav({
   ];
 
   return (
-    <nav className="fixed inset-x-3 bottom-3 z-50 rounded-2xl border border-(--outline-variant)/50 bg-(--surface-container-low)/95 p-2 backdrop-blur-md lg:hidden">
+    <nav className="premium-surface fixed inset-x-3 bottom-3 z-50 rounded-2xl p-2 backdrop-blur-md lg:hidden">
       <div className="grid grid-cols-5 gap-2">
         {items.map((item) => {
           const isActive = item.key === activePage;
@@ -24,7 +24,7 @@ function MobileBottomNav({
             <button
               key={item.key}
               onClick={() => onNavigate(item.key)}
-              className={`flex flex-col items-center justify-center rounded-xl px-2 py-2 transition ${
+              className={`premium-lift flex flex-col items-center justify-center rounded-xl px-2 py-2 transition ${
                 isActive
                   ? "bg-(--primary) text-(--on-primary)"
                   : "text-(--muted) hover:bg-(--surface-container-high)"

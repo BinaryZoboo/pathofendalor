@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import auctionHouseHero from "../assets/hdvlostark.jpg";
 import {
@@ -69,7 +69,7 @@ function MetricCard({
         : "text-(--muted) bg-(--surface-container-high) border-(--outline-variant)/50";
 
   return (
-    <article className="rounded-2xl border border-(--outline-variant)/45 bg-(--surface-container-low) p-4">
+    <article className="game-panel premium-lift rounded-2xl p-4">
       <div className="flex items-center justify-between">
         <p className="text-xs text-(--muted)">{label}</p>
         <span
@@ -97,10 +97,10 @@ function SortChip({
   return (
     <button
       onClick={onClick}
-      className={`rounded-full border px-4 py-2 font-label text-[10px] tracking-[0.14em] transition ${
+      className={`game-chip rounded-full px-4 py-2 font-label text-[10px] tracking-[0.14em] transition ${
         active
-          ? "border-(--primary)/35 bg-(--primary)/14 text-(--primary)"
-          : "border-(--outline-variant)/60 bg-(--surface-container-high)/70 text-(--muted) hover:text-(--on-background)"
+          ? "game-chip-active text-(--primary)"
+          : "text-(--muted) hover:text-(--on-background)"
       }`}
     >
       {label}
@@ -113,9 +113,12 @@ function AuctionHousePage() {
     null,
   );
   const [error, setError] = useState<string | null>(null);
+  const [copyError, setCopyError] = useState<string | null>(null);
+  const [copiedSaleId, setCopiedSaleId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortKey>("price");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+  const copyFeedbackTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     let timerId: number | null = null;
@@ -141,6 +144,14 @@ function AuctionHousePage() {
       active = false;
       if (timerId !== null) {
         window.clearTimeout(timerId);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (copyFeedbackTimerRef.current !== null) {
+        window.clearTimeout(copyFeedbackTimerRef.current);
       }
     };
   }, []);
@@ -203,9 +214,35 @@ function AuctionHousePage() {
     );
   };
 
+  const handleContactSeller = async (sale: AuctionHouseSale) => {
+    const seller = sale.seller.trim();
+    const itemName = sale.itemName.trim() || "cet objet";
+
+    if (!seller) return;
+
+    const messageTemplate =
+      "Bonjour, ton/ta @item en vente sur l'hotel des ventes m'interresse, disponible ?";
+    const message = messageTemplate.replaceAll("@item", itemName);
+    const command = `/msg ${seller} ${message}`;
+
+    try {
+      await navigator.clipboard.writeText(command);
+      setCopyError(null);
+      setCopiedSaleId(sale.id);
+      if (copyFeedbackTimerRef.current !== null) {
+        window.clearTimeout(copyFeedbackTimerRef.current);
+      }
+      copyFeedbackTimerRef.current = window.setTimeout(() => {
+        setCopiedSaleId(null);
+      }, 1800);
+    } catch {
+      setCopyError("Impossible de copier la commande.");
+    }
+  };
+
   return (
     <section className="space-y-8">
-      <section className="relative overflow-hidden rounded-3xl border border-(--outline-variant)/50 p-6 md:p-10">
+      <section className="premium-surface shimmer-border relative overflow-hidden rounded-3xl p-6 md:p-10">
         <img
           src={auctionHouseHero}
           alt="Hotel des ventes marketplace"
@@ -266,7 +303,7 @@ function AuctionHousePage() {
         />
       </section>
 
-      <section className="glass-panel rounded-2xl border border-(--outline-variant)/45 p-5 md:p-6">
+      <section className="glass-panel shimmer-border rounded-2xl border border-(--outline-variant)/45 p-5 md:p-6">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
           <div className="w-full xl:max-w-lg">
             <label
@@ -329,13 +366,19 @@ function AuctionHousePage() {
         </p>
       )}
 
+      {copyError && (
+        <p className="rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-500">
+          {copyError}
+        </p>
+      )}
+
       {!error && payload && !payload.available && (
         <p className="rounded-xl border border-(--outline-variant)/45 bg-(--surface-container-low) px-4 py-3 text-sm text-(--muted)">
           Aucune vente active detectee pour le moment.
         </p>
       )}
 
-      <section className="overflow-hidden rounded-2xl border border-(--outline-variant)/45 bg-(--surface-container-low)">
+      <section className="game-panel overflow-hidden rounded-2xl">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-(--outline-variant)/45">
             <thead className="bg-(--surface-container-high)/70">
@@ -407,9 +450,20 @@ function AuctionHousePage() {
                     </div>
                   </td>
                   <td className="px-4 py-3 text-sm">
-                    <span className="rounded-full border border-(--outline-variant)/55 bg-(--surface-container-high)/75 px-3 py-1 text-xs text-(--on-background)">
-                      {sale.seller}
-                    </span>
+                    <div className="inline-flex items-center gap-2">
+                      <span className="rounded-full border border-(--outline-variant)/55 bg-(--surface-container-high)/75 px-3 py-1 text-xs text-(--on-background)">
+                        {sale.seller}
+                      </span>
+                      <button
+                        onClick={() => handleContactSeller(sale)}
+                        disabled={!sale.seller.trim()}
+                        className="rounded-full border border-(--primary)/35 bg-(--primary)/12 px-3 py-1 font-label text-[10px] tracking-[0.14em] text-(--primary) transition hover:bg-(--primary)/20 disabled:cursor-not-allowed disabled:opacity-45"
+                      >
+                        {copiedSaleId === sale.id
+                          ? "COMMANDE COPIEE"
+                          : "CONTACTER"}
+                      </button>
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-right text-sm text-(--muted)">
                     {numberFormatter.format(sale.quantity)}

@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "updatedAt": "2026-03-31",
+  "sanctionLadder": [
+    "Avertissement ecrit",
+    "Restriction temporaire",
+    "Suspension du compte",
+    "Bannissement definitif"
+  ],
+  "rules": [
+    {
+      "id": "respect-1",
+      "title": "Aucune toxicite ou harassment",
+      "severity": "strict",
+      "category": "respect",
+      "description": "Le chat et les interactions vocales doivent rester propres, sans insultes, menaces ou acharnement.",
+      "sanction": "Mute immediate puis ban temporaire en cas de recidive.",
+      "examples": [
+        "Spam d'insultes en pvp",
+        "Provocation ciblee repetee",
+        "Discrimination explicite"
+      ]
+    },
+    {
+      "id": "respect-2",
+      "title": "Signalement clair des abus",
+      "severity": "info",
+      "category": "respect",
+      "description": "Utilise les canaux staff avec preuves (capture, heure, pseudo) pour accelerer les actions.",
+      "sanction": "Aucune sanction si rapport de bonne foi.",
+      "examples": [
+        "Capture chat",
+        "Coordonnees de zone",
+        "Horodatage de l'incident"
+      ]
+    },
+    {
+      "id": "economy-1",
+      "title": "Aucun scam ni faux listing",
+      "severity": "strict",
+      "category": "economy",
+      "description": "Toute tentative de tromperie economique est consideree comme fraude serveur.",
+      "sanction": "Suppression des gains + suspension + blacklist possible.",
+      "examples": [
+        "Prix appat puis retrait rapide",
+        "Item non conforme a l'annonce",
+        "Manipulation coordonnee de marche"
+      ]
+    },
+    {
+      "id": "economy-2",
+      "title": "RMT strictement interdit",
+      "severity": "strict",
+      "category": "economy",
+      "description": "Aucun echange argent reel contre ressources, comptes ou avantages en jeu.",
+      "sanction": "Ban definitif de tous les comptes impliques.",
+      "examples": [
+        "Cash contre monnaie IG",
+        "Achat d'objets premium hors boutique"
+      ]
+    },
+    {
+      "id": "combat-1",
+      "title": "Clients modifies interdits",
+      "severity": "strict",
+      "category": "combat",
+      "description": "Les modules donnant un avantage illegitime (x-ray, fly, speed) ne sont jamais autorises.",
+      "sanction": "Ban direct selon gravite des preuves.",
+      "examples": ["Aim assist", "Reach anormal", "Auto potions scripts"]
+    },
+    {
+      "id": "combat-2",
+      "title": "Spawn kill et camp abusif limites",
+      "severity": "warning",
+      "category": "combat",
+      "description": "Le pvp reste libre, mais l'acharnement sur zone de spawn est sanctionnable.",
+      "sanction": "Avertissement puis restriction pvp temporaire.",
+      "examples": ["Camp de respawn", "Chain kill en boucle"]
+    },
+    {
+      "id": "build-1",
+      "title": "Respect des zones et claims",
+      "severity": "warning",
+      "category": "build",
+      "description": "Le grief, meme partiel, est trace et restaure avec sanction adaptee.",
+      "sanction": "Rollback des degats + sanctions progressives.",
+      "examples": ["Destruction de facade", "Vol via coffre mal securise"]
+    },
+    {
+      "id": "build-2",
+      "title": "Performance map: constructions controlees",
+      "severity": "info",
+      "category": "build",
+      "description": "Les fermes ou machines tres lourdes doivent respecter les limites publiees pour garder un serveur fluide.",
+      "sanction": "Demande de correction puis desactivation technique si besoin.",
+      "examples": [
+        "Horloges redstone infinies",
+        "Entites en masse non optimizees"
+      ]
+    }
+  ]
+}

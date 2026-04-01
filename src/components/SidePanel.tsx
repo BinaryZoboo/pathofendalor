@@ -63,14 +63,22 @@ function SidePanel({
 
   return (
     <aside className="fixed bottom-0 left-0 top-0 z-40 hidden w-72 overflow-hidden lg:block">
-      <div className="glass-panel flex h-full flex-col overflow-hidden border-r border-(--outline-variant)/50 p-4">
-        <div className="mb-4 rounded-xl border border-(--outline-variant)/40 bg-(--surface-container-low) p-4">
+      <div className="sidepanel-brazier glass-panel relative flex h-full flex-col overflow-hidden border-r border-(--outline-variant)/50 p-4">
+        <div className="sidepanel-brazier-fire" aria-hidden="true" />
+        <div className="sidepanel-brazier-smoke" aria-hidden="true" />
+        <div className="sidepanel-brazier-embers" aria-hidden="true" />
+        <div
+          className="sidepanel-brazier-embers sidepanel-brazier-embers-alt"
+          aria-hidden="true"
+        />
+
+        <div className="premium-surface mb-4 rounded-xl p-4">
           <div>
             <p className="font-headline text-2xl font-bold tracking-tight">
               Path Of <span className="text-(--primary)">Endalor</span>
             </p>
             <p className="mt-1 text-sm text-(--muted)">
-              Cycle 30 - Menace en escalation
+              Cycle 0 - Path of Endalor 2.0
             </p>
           </div>
         </div>
@@ -82,10 +90,10 @@ function SidePanel({
               <button
                 key={item.key}
                 onClick={() => onNavigate(item.key)}
-                className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition ${
+                className={`premium-lift flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition ${
                   isActive
                     ? "bg-(--primary) text-(--on-primary)"
-                    : "bg-(--surface-container-low) text-(--muted) hover:text-(--on-background)"
+                    : "premium-surface text-(--muted) hover:text-(--on-background)"
                 }`}
               >
                 <span className="material-symbols-outlined">{item.icon}</span>
@@ -97,7 +105,7 @@ function SidePanel({
           })}
         </nav>
 
-        <div className="mt-auto flex items-center justify-between rounded-xl bg-linear-to-r from-(--primary)/18 to-(--secondary)/18 p-4">
+        <div className="premium-surface mt-auto flex items-center justify-between rounded-xl bg-linear-to-r from-(--primary)/18 to-(--secondary)/18 p-4">
           <div>
             <p className="font-label text-[10px] tracking-[0.14em] text-(--muted)">
               Prochaine reinitialisation
@@ -113,7 +121,7 @@ function SidePanel({
           <div className="flex flex-col items-center gap-1">
             <button
               onClick={onToggleTheme}
-              className="grid h-9 w-9 place-items-center rounded-full p-0 text-(--muted) transition hover:text-(--primary)"
+              className="game-chip grid h-9 w-9 place-items-center rounded-full p-0 text-(--muted) transition hover:text-(--primary)"
               aria-label="Changer le theme"
               title={
                 theme === "dark" ? "Activer mode clair" : "Activer mode sombre"

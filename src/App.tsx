@@ -1,11 +1,6 @@
-import {
-  type CSSProperties,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 
+import HeaderRainParticles from "./components/HeaderRainParticles";
 import MobileBottomNav from "./components/MobileBottomNav";
 import SidePanel from "./components/SidePanel";
 import { fetchServerStatus } from "./lib/serverStatus";
@@ -17,6 +12,38 @@ import RulesPage from "./pages/RulesPage";
 import { type PageKey } from "./types/navigation";
 
 type ThemeKey = "dark" | "light";
+type PageContext = { subtitle: string; tag: string };
+
+const PAGE_TITLES: Record<PageKey, string> = {
+  dashboard: "Dashboard",
+  craft: "Craft",
+  bestiary: "Boss & Loots",
+  auctionhouse: "Hotel des ventes",
+  rules: "Reglement",
+};
+
+const PAGE_CONTEXT: Record<PageKey, PageContext> = {
+  dashboard: {
+    subtitle: "Vue synthese du serveur et des activites en cours.",
+    tag: "VUE GLOBALE",
+  },
+  craft: {
+    subtitle: "Repere rapidement les recettes et priorites de progression.",
+    tag: "ARTISANAT",
+  },
+  bestiary: {
+    subtitle: "Consulte les menaces et les loots avant de lancer un raid.",
+    tag: "PREPARATION RAID",
+  },
+  auctionhouse: {
+    subtitle: "Observe les tendances du marche et les meilleures opportunites.",
+    tag: "ECONOMIE LIVE",
+  },
+  rules: {
+    subtitle: "Valide les regles et debloque l'onboarding client.",
+    tag: "CONFORMITE",
+  },
+};
 
 function getPageFromHash(): PageKey {
   const cleanHash = window.location.hash.replace("#", "");
@@ -58,11 +85,8 @@ function App() {
     x: window.innerWidth / 2,
     y: window.innerHeight / 2,
   }));
-  const [showServerIp, setShowServerIp] = useState(false);
-  const [copyFeedback, setCopyFeedback] = useState(false);
   const [serverOnline, setServerOnline] = useState<boolean>(false);
   const rafRef = useRef<number | null>(null);
-  const feedbackTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const onHashChange = () => setPage(getPageFromHash());
@@ -97,14 +121,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    return () => {
-      if (feedbackTimerRef.current !== null) {
-        window.clearTimeout(feedbackTimerRef.current);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
     let timerId: number | null = null;
     let active = true;
 
@@ -131,35 +147,11 @@ function App() {
     };
   }, []);
 
-  const pageTitle = useMemo(() => {
-    if (page === "dashboard") return "Dashboard";
-    if (page === "craft") return "Craft";
-    if (page === "bestiary") return "Boss & Loots";
-    if (page === "auctionhouse") return "Hotel des ventes";
-    return "Règlement";
-  }, [page]);
+  const pageTitle = PAGE_TITLES[page];
+  const pageContext = PAGE_CONTEXT[page];
 
   const goToPage = (nextPage: PageKey) => {
     window.location.hash = nextPage;
-  };
-
-  const handleServerIpClick = async () => {
-    const serverIp = "play.pathofendalor.net";
-    setShowServerIp(true);
-
-    try {
-      await navigator.clipboard.writeText(serverIp);
-    } catch {
-      // Clipboard errors are non-blocking for this interaction.
-    }
-
-    setCopyFeedback(true);
-    if (feedbackTimerRef.current !== null) {
-      window.clearTimeout(feedbackTimerRef.current);
-    }
-    feedbackTimerRef.current = window.setTimeout(() => {
-      setCopyFeedback(false);
-    }, 1500);
   };
 
   return (
@@ -187,49 +179,43 @@ function App() {
       />
 
       <main className="relative z-10 h-full overflow-y-auto px-4 pb-24 pt-6 md:px-8 md:pb-12 lg:ml-72 lg:px-10 lg:pt-8">
-        <header className="rounded-3xl glass-panel mb-8 flex flex-col gap-4 border border-(--outline-variant)/40 px-6 py-5 md:flex-row md:items-stretch md:justify-between">
-          <div>
-            <p className="font-label text-[10px] tracking-[0.26em] text-(--muted)">
-              PATH OF ENDALOR // TRANSMISSION EN DIRECT
-            </p>
-            <h1 className="mt-2 font-headline text-3xl font-bold tracking-tight md:text-5xl">
-              {pageTitle}
-            </h1>
-          </div>
-          <div className="flex flex-col items-end md:self-stretch md:justify-between">
-            <div className="flex flex-col items-end gap-1">
-              <button
-                onClick={handleServerIpClick}
-                className="rounded-full border border-(--primary)/35 bg-(--primary)/12 px-3 py-1 font-label text-[10px] tracking-[0.16em] text-(--primary) transition hover:bg-(--primary)/20"
-                title="Cliquer pour copier l'IP"
-              >
-                {showServerIp
-                  ? "srv1319801.hstgr.cloud:25565"
-                  : "IP du serveur"}
-              </button>
-              {copyFeedback && (
-                <span className="font-label text-[10px] tracking-[0.12em] text-(--muted)">
-                  IP copiee dans le presse-papiers
-                </span>
-              )}
-            </div>
+        <section className="fade-in-up mb-8">
+          <header className="premium-surface shimmer-border relative overflow-hidden rounded-3xl p-6 md:p-8">
+            <div className="pointer-events-none absolute -right-18 -top-16 h-52 w-52 rounded-full bg-(--primary)/14 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-16 -left-14 h-44 w-44 rounded-full bg-(--secondary)/12 blur-3xl" />
+            <HeaderRainParticles page={page} />
 
-            <div className="flex items-center gap-3">
-              <span className="rounded-full bg-(--surface-container-high) px-3 py-1 font-label text-[10px] tracking-[0.15em] text-(--muted)">
-                version 1.21.1
-              </span>
-              <span
-                className={`rounded-full border px-3 py-1 font-label text-[10px] tracking-[0.15em] ${
-                  serverOnline
-                    ? "border-green-600/30 bg-green-600/10 text-green-600"
-                    : "border-red-600/30 bg-red-600/10 text-red-600"
-                }`}
-              >
-                {serverOnline ? "Online" : "Offline"}
-              </span>
+            <span
+              className={`server-status-dot absolute right-4 top-4 z-20 ${
+                serverOnline
+                  ? "server-status-dot-online"
+                  : "server-status-dot-offline"
+              }`}
+              title={serverOnline ? "Serveur en ligne" : "Serveur hors ligne"}
+              aria-label={
+                serverOnline ? "Serveur en ligne" : "Serveur hors ligne"
+              }
+            />
+
+            <div className="relative z-10">
+              <div className="flex flex-wrap items-center gap-2">
+                <p className="font-label text-[10px] tracking-[0.22em] text-(--muted)">
+                  PATH OF ENDALOR
+                </p>
+                <span className="game-chip rounded-full px-2.5 py-1 font-label text-[10px] tracking-[0.14em] text-(--muted)">
+                  {pageContext.tag}
+                </span>
+              </div>
+
+              <h1 className="mt-2 font-headline text-3xl font-bold tracking-tight md:text-5xl">
+                {pageTitle}
+              </h1>
+              <p className="mt-2 max-w-2xl text-sm text-(--muted)">
+                {pageContext.subtitle}
+              </p>
             </div>
-          </div>
-        </header>
+          </header>
+        </section>
 
         {page === "dashboard" && <DashboardPage onNavigate={goToPage} />}
         {page === "craft" && <CraftPage />}
