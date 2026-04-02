@@ -15,89 +15,73 @@
     {
       "id": "transform",
       "title": "2. Stations",
-      "description": "Enchaine forge, alchimie et enchantement pour convertir tes ressources sans perte.",
+      "description": "Enchaine Rune Altar, Enclume et table de craft pour convertir tes ressources sans perte.",
       "icon": "build"
     },
     {
       "id": "optimize",
       "title": "3. Optimisation",
-      "description": "Priorise les crafts qui augmentent directement ton DPS, ta survie ou ton utility raid.",
+      "description": "Priorise les crafts qui augmentent directement ton DPS, ta survie ou ton portefeuille.",
       "icon": "bolt"
     }
   ],
   "priorityCrafts": [
     {
       "id": "focus-emblem",
-      "name": "Embleme de Focus",
+      "name": "Rune de fire",
       "station": "Enchantement",
-      "tier": "B",
+      "tier": "A",
       "icon": "auto_awesome",
-      "benefit": "Stabilise regen mana/energie sur combats longs",
-      "ingredients": [
-        "6x Poussiere astrale",
-        "1x Noyau arcanique",
-        "2x Gemme stable"
-      ],
-      "notes": "Bon investissement pour builds mage/support."
+      "benefit": "Munition pour les mages fire, boost de degats sur les sorts de feu",
+      "ingredients": ["1x cobblestone", "1x charbon"],
+      "notes": "Si le craft est effectuer sur l'altar de rune, il donnera 8 munitions au lieu de 2."
     },
     {
       "id": "focus-emblem",
-      "name": "Embleme de Focus",
+      "name": "Rune de l'arcane",
       "station": "Enchantement",
-      "tier": "B",
+      "tier": "A",
       "icon": "auto_awesome",
-      "benefit": "Stabilise regen mana/energie sur combats longs",
-      "ingredients": [
-        "6x Poussiere astrale",
-        "1x Noyau arcanique",
-        "2x Gemme stable"
-      ],
-      "notes": "Bon investissement pour builds mage/support."
+      "benefit": "Munition pour les mages arcane, boost de degats sur les sorts d'arcane",
+      "ingredients": ["1x cobblestone", "1x amethyste shard"],
+      "notes": "Si le craft est effectuer sur l'altar de rune, il donnera 8 munitions au lieu de 2."
     },
     {
       "id": "focus-emblem",
-      "name": "Embleme de Focus",
+      "name": "Rune de la glace",
       "station": "Enchantement",
-      "tier": "B",
+      "tier": "A",
       "icon": "auto_awesome",
-      "benefit": "Stabilise regen mana/energie sur combats longs",
-      "ingredients": [
-        "6x Poussiere astrale",
-        "1x Noyau arcanique",
-        "2x Gemme stable"
-      ],
-      "notes": "Bon investissement pour builds mage/support."
+      "benefit": "Munition pour les mages glace, boost de degats sur les sorts de glace",
+      "ingredients": ["1x snowball", "1x cobblestone"],
+      "notes": "Si le craft est effectuer sur l'altar de rune, il donnera 8 munitions au lieu de 2."
     },
     {
       "id": "focus-emblem",
-      "name": "Embleme de Focus",
+      "name": "Rune du healer",
       "station": "Enchantement",
-      "tier": "B",
+      "tier": "A",
       "icon": "auto_awesome",
-      "benefit": "Stabilise regen mana/energie sur combats longs",
-      "ingredients": [
-        "6x Poussiere astrale",
-        "1x Noyau arcanique",
-        "2x Gemme stable"
-      ],
-      "notes": "Bon investissement pour builds mage/support."
+      "benefit": "Munition pour les healers, boost de soins sur les sorts de soin",
+      "ingredients": ["1x gold", "1x honey"],
+      "notes": "Si le craft est effectuer sur l'altar de rune, il donnera 8 munitions au lieu de 2."
     }
   ],
   "stationTips": [
     {
-      "station": "Forge",
+      "station": "Enclume",
       "icon": "hardware",
-      "tip": "Transforme en lot pour limiter les pertes de composants rares."
+      "tip": "Enchante tes meilleurs pieces pour composer un item rare."
     },
     {
       "station": "Alchimie",
       "icon": "biotech",
-      "tip": "Reserve les catalysts premium aux combats de progression."
+      "tip": "Confectionne des potions et des objets de consommation."
     },
     {
-      "station": "Enchantement",
+      "station": "Altar rune craft",
       "icon": "flare",
-      "tip": "Verrouille un objectif de stat principal avant les rerolls."
+      "tip": "Craft des runes pour anéantir tes ennemis."
     }
   ]
 }

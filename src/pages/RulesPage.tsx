@@ -182,10 +182,10 @@ const clientSetupSteps: ClientSetupStep[] = [
     title: "Configurer le launcher",
     icon: "rocket_launch",
     description:
-      "Utilise un launcher stable (Prism, ATLauncher ou CurseForge) pour gerer proprement les mods.",
+      "Télécharge le launcher client de Neoforge sur le site officiel pour gerer proprement les mods.",
     details: [
-      "Cree une instance dediee Path of Endalor",
-      "Alloue 6 a 8 Go de RAM selon ta machine",
+      "voici le lien: https://neoforged.net/",
+      "Derniere version stable",
     ],
   },
   {
@@ -193,7 +193,7 @@ const clientSetupSteps: ClientSetupStep[] = [
     title: "Version Minecraft cible",
     icon: "tune",
     description:
-      "Selectionne la version serveur recommandee, puis active le bon loader (Forge/NeoForge/Fabric selon le pack).",
+      "Sélectionne la version serveur 1.21.1, puis active le loader.",
     details: [
       "Ne melange pas deux loaders differents",
       "Conserve un profil propre pour eviter les conflits",
@@ -204,15 +204,21 @@ const clientSetupSteps: ClientSetupStep[] = [
     title: "Installer mods et fichiers",
     icon: "folder_zip",
     description:
-      "Telecharge le pack client puis importe le profil, ou copie les fichiers mods/config/resourcepacks dans l'instance.",
-    details: ["Mods dans le dossier mods", "Configs dans le dossier config"],
+      "Telecharge le pack client puis importe le profil, ou copie les fichiers mods, config, resourcepacks, kubejs dans l'instance.",
+    details: [
+      "Pour creer les fichiers mod dans minecraft lance une premiere fois ton client",
+      "Mods dans le dossier mods",
+      "Configs dans le dossier config",
+      "Resourcepacks dans le dossier resourcepacks",
+      "KubeJS dans le dossier kubejs",
+    ],
   },
   {
     id: "check",
     title: "Verification finale",
     icon: "verified",
     description:
-      "Lance une premiere session locale, puis rejoins le serveur pour verifier que tous les assets se chargent sans erreur.",
+      "Lance une premiere session locale (Nouveau monde solo), puis rejoins le serveur pour verifier que tous les assets se chargent sans erreur.",
     details: [
       "IP serveur: srv1319801.hstgr.cloud:25565",
       "Si crash: retire les mods externes non officiels",
