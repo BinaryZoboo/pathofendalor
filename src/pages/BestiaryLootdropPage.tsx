@@ -1,5 +1,10 @@
 import { useMemo, useState } from "react";
 
+import bgAncientRem from "../assets/boss/ancientrem.webp";
+import bgEnderGuardian from "../assets/boss/enderguardian.webp";
+import bgHarbinger from "../assets/boss/harbinger.webp";
+import bgIgnis from "../assets/boss/ignis.webp";
+import bgNetherite from "../assets/boss/netherite.webp";
 import PageHero from "../components/PageHero";
 
 type BossEntry = {
@@ -16,6 +21,75 @@ type BossEntry = {
 type MenaceLevel = BossEntry["menace"];
 type MenaceFilter = "Tous" | MenaceLevel;
 type LootTier = "Critique" | "Majeur" | "Standard";
+type BossTheme =
+  | "Void"
+  | "Nether"
+  | "Arcane"
+  | "Ancient"
+  | "Ocean"
+  | "Frost"
+  | "Infernal";
+
+const THEME_META: Record<
+  BossTheme,
+  {
+    label: string;
+    backgroundImage: string;
+    thumbImage: string;
+  }
+> = {
+  Void: {
+    label: "Void",
+    backgroundImage: bgEnderGuardian,
+    thumbImage: bgEnderGuardian,
+  },
+  Nether: {
+    label: "Nether",
+    backgroundImage: bgNetherite,
+    thumbImage: bgNetherite,
+  },
+  Arcane: {
+    label: "Arcane",
+    backgroundImage: bgHarbinger,
+    thumbImage: bgHarbinger,
+  },
+  Ancient: {
+    label: "Ancient",
+    backgroundImage: bgAncientRem,
+    thumbImage: bgAncientRem,
+  },
+  Ocean: {
+    label: "Ocean",
+    backgroundImage: bgEnderGuardian,
+    thumbImage: bgEnderGuardian,
+  },
+  Frost: {
+    label: "Frost",
+    backgroundImage: bgAncientRem,
+    thumbImage: bgAncientRem,
+  },
+  Infernal: {
+    label: "Infernal",
+    backgroundImage: bgIgnis,
+    thumbImage: bgIgnis,
+  },
+};
+
+const ZONE_THEME_MAP: Record<string, BossTheme> = {
+  "Ruined Citadel": "Void",
+  "Soul Forge": "Nether",
+  "Ancient Factory": "Arcane",
+  "Cursed Pyramid": "Ancient",
+  "Overgrown Cave": "Ancient",
+  "Sunken City": "Ocean",
+  Acropolis: "Ocean",
+  "Frost Prison": "Frost",
+  "Burning Arena": "Infernal",
+};
+
+function getBossTheme(zone: string): BossTheme {
+  return ZONE_THEME_MAP[zone] ?? "Ancient";
+}
 
 const MENACE_META: Record<
   MenaceLevel,
@@ -404,6 +478,7 @@ function StatLine({
 function BestiaryLootdropPage() {
   const [menaceFilter, setMenaceFilter] = useState<MenaceFilter>("Tous");
   const [zoneFilter, setZoneFilter] = useState<string>("Toutes");
+  const [isBossRevealActive, setIsBossRevealActive] = useState(false);
   const [selectedBossName, setSelectedBossName] = useState<string>(
     BOSSES[0].name,
   );
@@ -437,6 +512,7 @@ function BestiaryLootdropPage() {
     BOSSES[0];
 
   const selectedMenace = MENACE_META[selectedBoss.menace];
+  const selectedTheme = THEME_META[getBossTheme(selectedBoss.zoneApparition)];
   const selectedLoots = selectedBoss.loots.map(getLootMeta);
   const criticalLoots = selectedLoots.filter(
     (loot) => loot.tier === "Critique",
@@ -543,12 +619,29 @@ function BestiaryLootdropPage() {
 
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
           <section className="relative rounded-2xl border border-(--outline-variant)/45 bg-linear-to-b from-(--surface-container-high)/70 to-(--surface-container-low) p-5 shadow-(--soft-shadow) lg:col-span-8 lg:flex lg:min-h-168 lg:h-full lg:flex-col">
-            <div className="flex flex-wrap items-start justify-between gap-3">
+            <img
+              src={selectedTheme.backgroundImage}
+              alt={`Theme ${selectedTheme.label}`}
+              className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
+                isBossRevealActive ? "opacity-100" : "opacity-50"
+              }`}
+            />
+            <div
+              className={`pointer-events-none absolute inset-0 bg-linear-to-br from-(--surface-container-high)/64 via-(--surface-container-low)/52 to-(--surface-container-low)/72 transition-opacity duration-300 ${
+                isBossRevealActive ? "opacity-0" : "opacity-100"
+              }`}
+            />
+
+            <div className="relative z-10 flex flex-wrap items-start justify-between gap-3">
               <div>
                 <p className="font-label text-[10px] tracking-[0.16em] text-(--primary)">
                   BOSS PRINCIPAL
                 </p>
-                <h3 className="mt-2 font-headline text-3xl font-bold tracking-tight md:text-4xl">
+                <h3
+                  onMouseEnter={() => setIsBossRevealActive(true)}
+                  onMouseLeave={() => setIsBossRevealActive(false)}
+                  className="mt-2 font-headline text-3xl font-bold tracking-tight md:text-4xl"
+                >
                   {selectedBoss.name}
                 </h3>
                 <p className="mt-2 text-sm text-(--muted)">
@@ -557,7 +650,9 @@ function BestiaryLootdropPage() {
               </div>
 
               <span
-                className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 font-label text-[10px] tracking-[0.14em] ${selectedMenace.badgeClass}`}
+                className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 font-label text-[10px] tracking-[0.14em] transition-opacity duration-300 ${selectedMenace.badgeClass} ${
+                  isBossRevealActive ? "opacity-0" : "opacity-100"
+                }`}
               >
                 <span className={selectedMenace.markerClass} />
                 <span className="material-symbols-outlined text-[14px]">
@@ -569,7 +664,11 @@ function BestiaryLootdropPage() {
               </span>
             </div>
 
-            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div
+              className={`relative z-10 mt-6 grid grid-cols-1 gap-4 transition-opacity duration-300 sm:grid-cols-2 ${
+                isBossRevealActive ? "opacity-0" : "opacity-100"
+              }`}
+            >
               <StatLine
                 label="Point de vie"
                 value={selectedBoss.pointDeVie}
@@ -592,7 +691,11 @@ function BestiaryLootdropPage() {
               />
             </div>
 
-            <div className="mt-6 game-panel rounded-xl p-5">
+            <div
+              className={`relative z-10 mt-6 game-panel rounded-xl p-5 transition-opacity duration-300 ${
+                isBossRevealActive ? "opacity-0" : "opacity-100"
+              }`}
+            >
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <span className="material-symbols-outlined text-(--primary)">
@@ -657,6 +760,7 @@ function BestiaryLootdropPage() {
             <div className="boss-list-scroll mt-4 space-y-2 overflow-y-auto pr-1 lg:flex-1">
               {filteredBosses.map((boss, index) => {
                 const isActive = boss.name === selectedBoss.name;
+                const theme = THEME_META[getBossTheme(boss.zoneApparition)];
                 return (
                   <button
                     key={boss.name}
@@ -664,21 +768,42 @@ function BestiaryLootdropPage() {
                     aria-pressed={isActive}
                     className={`group relative w-full overflow-hidden rounded-xl border px-3 py-3 text-left transition ${
                       isActive
-                        ? "border-(--primary)/45 bg-(--primary)/18 text-(--on-background)"
-                        : "border-(--outline-variant)/45 bg-(--surface-container-low)/80 text-(--muted) hover:border-(--primary)/30 hover:text-(--on-background)"
+                        ? "border-(--primary)/55 text-(--on-background)"
+                        : "border-(--outline-variant)/45 text-(--muted) hover:border-(--primary)/30 hover:text-(--on-background)"
                     }`}
                   >
-                    <span className="font-label text-[10px] tracking-[0.14em] opacity-75">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <p className="mt-1 font-headline text-lg font-bold leading-tight">
-                      {boss.name}
-                    </p>
-                    <p className="mt-1 text-xs text-(--muted)">
-                      {boss.zoneApparition}
-                    </p>
+                    <img
+                      src={theme.thumbImage}
+                      alt={`Theme ${theme.label}`}
+                      className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition ${
+                        isActive
+                          ? "opacity-45"
+                          : "opacity-30 group-hover:opacity-38"
+                      }`}
+                    />
+
+                    <div
+                      className={`pointer-events-none absolute inset-0 ${
+                        isActive
+                          ? "bg-linear-to-r from-(--surface-container-low)/38 to-(--surface-container-low)/58"
+                          : "bg-linear-to-r from-(--surface-container-low)/52 to-(--surface-container-low)/70"
+                      }`}
+                    />
+
+                    <div className="relative z-10">
+                      <span className="font-label text-[10px] tracking-[0.14em] opacity-80">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+
+                      <p className="mt-1 font-headline text-lg font-bold leading-tight">
+                        {boss.name}
+                      </p>
+                      <p className="mt-1 text-xs text-(--muted)">
+                        {boss.zoneApparition}
+                      </p>
+                    </div>
                     <span
-                      className={`absolute bottom-0 left-0 h-0.5 bg-(--primary) transition-all ${
+                      className={`absolute bottom-0 left-0 z-10 h-0.5 bg-(--primary) transition-all ${
                         isActive ? "w-full" : "w-0 group-hover:w-2/3"
                       }`}
                     />
