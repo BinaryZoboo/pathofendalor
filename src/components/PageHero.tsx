@@ -26,9 +26,9 @@ function PageHero({
           <img
             src={imageSrc}
             alt={imageAlt ?? ""}
-            className="absolute inset-0 h-full w-full object-cover opacity-28"
+            className="absolute inset-0 h-full w-full object-cover opacity-50 brightness-110 contrast-105"
           />
-          <div className="absolute inset-0 bg-linear-to-r from-(--background) via-(--background)/78 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-r from-(--background) via-(--background)/60 to-transparent" />
         </>
       ) : (
         <>

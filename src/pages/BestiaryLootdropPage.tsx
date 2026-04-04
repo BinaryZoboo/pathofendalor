@@ -1,11 +1,45 @@
 import { useMemo, useState } from "react";
 
+import bgAmetystCrab from "../assets/boss/amethyst_crab.webp";
 import bgAncientRem from "../assets/boss/ancientrem.webp";
+import bgAptrgangr from "../assets/boss/aptgangr.webp";
+import bgClawdian from "../assets/boss/clawdian.webp";
+import bgEnderGolem from "../assets/boss/ender_golem.webp";
 import bgEnderGuardian from "../assets/boss/enderguardian.webp";
 import bgHarbinger from "../assets/boss/harbinger.webp";
 import bgIgnis from "../assets/boss/ignis.webp";
+import bgIgnitedBerserker from "../assets/boss/ignited_berserker.webp";
+import bgIgnitedRevenant from "../assets/boss/ignited_revenant.webp";
+import bgKobelenator from "../assets/boss/kobelenator.webp";
+import bgLeviathan from "../assets/boss/leviathan.webp";
+import bgMaledictus from "../assets/boss/maledictus.webp";
 import bgNetherite from "../assets/boss/netherite.webp";
+import bgProwler from "../assets/boss/prowler.webp";
+import bgScylla from "../assets/boss/scylla.webp";
+import bgWadjet from "../assets/boss/wadjet.webp";
+import heroBoss from "../assets/herobg/boss.webp";
 import PageHero from "../components/PageHero";
+
+// Boss image mapping - une image unique par boss
+const BOSS_IMAGE_MAP: Record<string, string> = {
+  "Ender Golem": bgEnderGolem,
+  "Ender Guardian": bgEnderGuardian,
+  "Netherite Monstrosity": bgNetherite,
+  "The Prowler": bgProwler,
+  "The Harbinger": bgHarbinger,
+  Kobelediator: bgKobelenator,
+  Wadjet: bgWadjet,
+  "The Ancient Remnant": bgAncientRem,
+  "Amethyst Crab": bgAmetystCrab,
+  Leviathan: bgLeviathan,
+  Clawdian: bgClawdian,
+  Scylla: bgScylla,
+  Aptrgangr: bgAptrgangr,
+  Maledictus: bgMaledictus,
+  "Ignited Revenant": bgIgnitedRevenant,
+  "Ignited Berserker": bgIgnitedBerserker,
+  Ignis: bgIgnis,
+};
 
 type BossEntry = {
   name: string;
@@ -51,27 +85,27 @@ const THEME_META: Record<
   Arcane: {
     label: "Arcane",
     backgroundImage: bgHarbinger,
-    thumbImage: bgHarbinger,
+    thumbImage: bgProwler,
   },
   Ancient: {
     label: "Ancient",
     backgroundImage: bgAncientRem,
-    thumbImage: bgAncientRem,
+    thumbImage: bgKobelenator,
   },
   Ocean: {
     label: "Ocean",
-    backgroundImage: bgEnderGuardian,
-    thumbImage: bgEnderGuardian,
+    backgroundImage: bgLeviathan,
+    thumbImage: bgClawdian,
   },
   Frost: {
     label: "Frost",
-    backgroundImage: bgAncientRem,
-    thumbImage: bgAncientRem,
+    backgroundImage: bgMaledictus,
+    thumbImage: bgAptrgangr,
   },
   Infernal: {
     label: "Infernal",
     backgroundImage: bgIgnis,
-    thumbImage: bgIgnis,
+    thumbImage: bgIgnitedBerserker,
   },
 };
 
@@ -534,7 +568,7 @@ function BestiaryLootdropPage() {
         title="Boss, niveaux de menace et table de loots"
         highlight="premium"
         description="Selectionne une zone ou un niveau de menace pour afficher la meilleure cible de farm, puis priorise les livres enchantes marques critiques."
-        imageSrc="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1600&q=80"
+        imageSrc={heroBoss}
         imageAlt="Boss de Path of Endalor"
       />
 
@@ -620,8 +654,11 @@ function BestiaryLootdropPage() {
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
           <section className="relative rounded-2xl border border-(--outline-variant)/45 bg-linear-to-b from-(--surface-container-high)/70 to-(--surface-container-low) p-5 shadow-(--soft-shadow) lg:col-span-8 lg:flex lg:min-h-168 lg:h-full lg:flex-col">
             <img
-              src={selectedTheme.backgroundImage}
-              alt={`Theme ${selectedTheme.label}`}
+              src={
+                BOSS_IMAGE_MAP[selectedBoss.name] ||
+                selectedTheme.backgroundImage
+              }
+              alt={selectedBoss.name}
               className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
                 isBossRevealActive ? "opacity-100" : "opacity-50"
               }`}
@@ -773,8 +810,8 @@ function BestiaryLootdropPage() {
                     }`}
                   >
                     <img
-                      src={theme.thumbImage}
-                      alt={`Theme ${theme.label}`}
+                      src={BOSS_IMAGE_MAP[boss.name] || theme.thumbImage}
+                      alt={boss.name}
                       className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition ${
                         isActive
                           ? "opacity-45"

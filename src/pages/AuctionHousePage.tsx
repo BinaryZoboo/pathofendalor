@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import auctionHouseHero from "../assets/hdvlostark.jpg";
+import auctionHouseHero from "../assets/herobg/hoteldeville.webp";
 import PageHero from "../components/PageHero";
 import {
   fetchAuctionHouseSales,

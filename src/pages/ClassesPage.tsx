@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
+import heroClasses from "../assets/herobg/classes.webp";
 import PageHero from "../components/PageHero";
 
 type ClassEntry = {
@@ -465,6 +466,7 @@ function ClassesPage() {
         title="Presentation des classes,"
         highlight="synergies incluses"
         description="Vue pratique des roles pour preparer une composition de groupe adaptee au contenu vise."
+        imageSrc={heroClasses}
       />
 
       {classesData.isProvisional && (

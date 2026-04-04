@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import heroCraft from "../assets/herobg/craft.webp";
 import PageHero from "../components/PageHero";
 
 type CraftWorkflowStep = {
@@ -243,6 +244,7 @@ function CraftPage() {
         title={craftData.hero.title}
         highlight={craftData.hero.highlight}
         description="Focus sur les crafts a fort impact pour gagner du temps de progression et optimiser les ressources rares."
+        imageSrc={heroCraft}
       />
 
       {craftError && (

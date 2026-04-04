@@ -6,6 +6,7 @@ import {
   useState,
 } from "react";
 
+import heroReglement from "../assets/herobg/reglement.webp";
 import PageHero from "../components/PageHero";
 
 type RuleSeverity = "info" | "warning" | "strict";
@@ -517,6 +518,7 @@ function RulesPage() {
         title="Un gameplay propre,"
         highlight="zero abus."
         description="Ces regles maintiennent un serveur stable, juste et competitif. Respecte-les pour proteger l'experience de toute la communaute."
+        imageSrc={heroReglement}
         actions={
           <>
             <a
