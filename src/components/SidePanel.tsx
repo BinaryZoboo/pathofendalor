@@ -55,7 +55,7 @@ function SidePanel({
 
   const items: Array<{ key: PageKey; label: string; icon: string }> = [
     { key: "dashboard", label: "Dashboard", icon: "dashboard" },
-    { key: "craft", label: "Craft", icon: "handyman" },
+    { key: "craft", label: "Wiki commandes", icon: "menu_book" },
     { key: "classes", label: "Classes", icon: "diversity_3" },
     { key: "bestiary", label: "Boss", icon: "skull" },
     { key: "auctionhouse", label: "Hotel des ventes", icon: "storefront" },

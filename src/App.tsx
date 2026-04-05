@@ -19,7 +19,7 @@ type PageContext = { subtitle: string; tag: string };
 
 const PAGE_TITLES: Record<PageKey, string> = {
   dashboard: "Dashboard",
-  craft: "Craft",
+  craft: "Wiki commandes",
   classes: "Classes",
   bestiary: "Boss & Loots",
   auctionhouse: "Hotel des ventes",
@@ -33,8 +33,8 @@ const PAGE_CONTEXT: Record<PageKey, PageContext> = {
   },
   craft: {
     subtitle:
-      "Repere rapidement les crafts importants et la feuille de route progression.",
-    tag: "ARTISANAT",
+      "Consulte toutes les commandes utiles aux joueurs avec recherche rapide.",
+    tag: "WIKI JOUEURS",
   },
   classes: {
     subtitle: "Compare les roles et synergies pour composer ton equipe.",
@@ -69,6 +69,7 @@ function getPageFromHash(): PageKey {
   }
 
   if (cleanHash === "home") return "dashboard";
+  if (cleanHash === "commands" || cleanHash === "commandes") return "craft";
   if (cleanHash === "class") return "classes";
   if (cleanHash === "wiki") return "bestiary";
   if (cleanHash === "hotel-des-ventes" || cleanHash === "cityhall") {

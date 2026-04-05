@@ -1,0 +1,174 @@
+{
+  "updatedAt": "2026-04-05",
+  "hero": {
+    "eyebrow": "WIKI JOUEURS",
+    "title": "Commandes utiles",
+    "highlight": " pour une survie reussie"
+  },
+  "categories": [
+    {
+      "id": "profil",
+      "label": "Profil",
+      "icon": "account_circle",
+      "description": "Infos perso, progression et stats de base."
+    },
+    {
+      "id": "economie",
+      "label": "Economie",
+      "icon": "payments",
+      "description": "Argent, echanges et commandes de marche."
+    },
+    {
+      "id": "teleport",
+      "label": "Teleport",
+      "icon": "explore",
+      "description": "Maison, retour rapide et deplacements utiles."
+    },
+    {
+      "id": "guilde",
+      "label": "Guilde",
+      "icon": "groups",
+      "description": "Outils de groupe, invitations et coordination."
+    }
+  ],
+  "commands": [
+    {
+      "id": "back",
+      "title": "Retour TP precedent",
+      "command": "/back",
+      "description": "Retourne a l'emplacement precedent de ta derniere teleportation.",
+      "categoryId": "teleport",
+      "access": "Joueur",
+      "aliases": ["/back"],
+      "example": "/back",
+      "usages": ["Erreur de position", "Echapper a une situation dangereuse"]
+    },
+    {
+      "id": "delhome",
+      "title": "Supprimer un home",
+      "command": "/delhome <nom>",
+      "description": "Supprime un point de retour personnalise.",
+      "categoryId": "teleport",
+      "access": "Joueur",
+      "aliases": [],
+      "example": "/delhome base",
+      "usages": [
+        "Supprimer un home inutile",
+        "Reorganiser ses points de retour"
+      ]
+    },
+    {
+      "id": "eco bal",
+      "title": "Verifier ta balance",
+      "command": "/eco bal",
+      "description": "Consulte ton solde en direct.",
+      "categoryId": "economie",
+      "access": "Joueur",
+      "aliases": ["/eco bal"],
+      "example": "/eco bal",
+      "usages": ["Verifier ton budget"]
+    },
+    {
+      "id": "eco daily",
+      "title": "Recevoir sa daily",
+      "command": "/eco daily",
+      "description": "Recois ton salaire quotidien.",
+      "categoryId": "economie",
+      "access": "Joueur",
+      "aliases": [],
+      "example": "/eco daily",
+      "usages": ["Recevoir son salaire", "Collecter une recompense quotidienne"]
+    },
+    {
+      "id": "eco orders request",
+      "title": "faire une commande",
+      "command": "/eco orders request <item> <quantite> <prix>",
+      "description": "Poster une demande d'achat pour un item specifique. IMPORTANT: Le nom de l'item doit etre son nom en anglais",
+      "categoryId": "economie",
+      "access": "Joueur",
+      "aliases": ["/eco order request <item> <quantite> <prix>"],
+      "example": "/eco orders request iron_sword 1 10",
+      "usages": ["Trouver un item specifique"]
+    },
+    {
+      "id": "eco orders claim",
+      "title": "Reclamer ses commandes",
+      "command": "/eco orders claim",
+      "description": "Ouvre le menu et reclame les commandes que tu as poste.",
+      "categoryId": "economie",
+      "access": "Joueur",
+      "aliases": ["/eco order claim"],
+      "example": "/eco orders claim",
+      "usages": [
+        "Reclamer une commande completee",
+        "Suivre ses commandes en cours"
+      ]
+    },
+    {
+      "id": "sethome",
+      "title": "Definir un home",
+      "command": "/sethome <nom>",
+      "description": "Cree un point de retour personnalise.",
+      "categoryId": "teleport",
+      "access": "VIP",
+      "aliases": [],
+      "example": "/sethome base",
+      "usages": ["Poser un point a la base", "Sauvegarder un spot de farm"]
+    },
+    {
+      "id": "home",
+      "title": "Retour a un home",
+      "command": "/home <nom>",
+      "description": "Teleportation vers un point sauvegarde.",
+      "categoryId": "teleport",
+      "access": "VIP",
+      "aliases": [],
+      "example": "/home base",
+      "cooldown": "10s",
+      "usages": ["Retour rapide apres raid", "Revenir au stockage"]
+    },
+    {
+      "id": "spawn",
+      "title": "Retour spawn",
+      "command": "/spawn",
+      "description": "Retourne au spawn principal du serveur.",
+      "categoryId": "teleport",
+      "access": "Joueur",
+      "aliases": [],
+      "example": "/spawn",
+      "cooldown": "5s",
+      "usages": ["Retrouver les PNJ", "Se replacer en zone safe"]
+    },
+    {
+      "id": "guild-invite",
+      "title": "Inviter un joueur",
+      "command": "/guild invite <joueur>",
+      "description": "Invite un joueur a rejoindre ta guilde.",
+      "categoryId": "guilde",
+      "access": "Joueur",
+      "aliases": ["/g invite <joueur>"],
+      "example": "/guild invite Sara",
+      "usages": ["Recruter un joueur", "Inviter un ami"]
+    }
+  ],
+  "tips": [
+    {
+      "id": "quick-copy",
+      "title": "Copie instantanee",
+      "icon": "content_copy",
+      "description": "Utilise le bouton copier pour envoyer vite les commandes en jeu."
+    },
+    {
+      "id": "search",
+      "title": "Recherche rapide",
+      "icon": "manage_search",
+      "description": "Tape un mot-cle, un alias ou une commande pour filtrer la liste."
+    },
+    {
+      "id": "access",
+      "title": "Niveau d'acces",
+      "icon": "verified_user",
+      "description": "Chaque commande indique son acces: Joueur, VIP ou Staff."
+    }
+  ]
+}

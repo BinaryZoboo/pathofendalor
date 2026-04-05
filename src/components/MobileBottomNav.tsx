@@ -9,7 +9,7 @@ function MobileBottomNav({
 }) {
   const items: Array<{ key: PageKey; label: string; icon: string }> = [
     { key: "dashboard", label: "Dashboard", icon: "dashboard" },
-    { key: "craft", label: "Craft", icon: "handyman" },
+    { key: "craft", label: "Wiki", icon: "menu_book" },
     { key: "classes", label: "Classes", icon: "diversity_3" },
     { key: "bestiary", label: "Boss", icon: "skull" },
     { key: "auctionhouse", label: "Hotel", icon: "storefront" },
