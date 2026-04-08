@@ -824,8 +824,6 @@ async function collectServerStatus() {
     throw new Error("MC_HOST missing. Set it in .env");
   }
 
-  const startedAt = Date.now();
-
   let online = false;
   let playersOnline = 0;
   let playersMax = 0;
@@ -843,18 +841,28 @@ async function collectServerStatus() {
     // If AMP data cannot be fetched, fallback to direct server status.
   }
 
-  if (playersMax === 0 && playersOnline === 0) {
-    try {
-      const response = await minecraftStatus(host, port, {
-        timeout: Number(process.env.MC_TIMEOUT_MS ?? 5000),
-        enableSRV: true,
-      });
+  try {
+    const response = await minecraftStatus(host, port, {
+      timeout: Number(process.env.MC_TIMEOUT_MS ?? 5000),
+      enableSRV: true,
+    });
 
+    // Prefer direct server round-trip latency over AMP latency to avoid inflated values.
+    const directPing = pickFirstNumber([
+      response?.roundTripLatency,
+      response?.latency,
+    ]);
+    if (directPing !== null) {
+      pingMs = Math.max(1, Math.round(directPing));
+    }
+
+    if (playersMax === 0 && playersOnline === 0) {
       online = true;
       playersOnline = response.players?.online ?? 0;
       playersMax = response.players?.max ?? 0;
-      pingMs = Math.max(1, Date.now() - startedAt);
-    } catch {
+    }
+  } catch {
+    if (playersMax === 0 && playersOnline === 0) {
       online = false;
     }
   }

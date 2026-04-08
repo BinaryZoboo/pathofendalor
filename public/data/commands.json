@@ -44,20 +44,6 @@
       "usages": ["Erreur de position", "Echapper a une situation dangereuse"]
     },
     {
-      "id": "delhome",
-      "title": "Supprimer un home",
-      "command": "/delhome <nom>",
-      "description": "Supprime un point de retour personnalise.",
-      "categoryId": "teleport",
-      "access": "Joueur",
-      "aliases": [],
-      "example": "/delhome base",
-      "usages": [
-        "Supprimer un home inutile",
-        "Reorganiser ses points de retour"
-      ]
-    },
-    {
       "id": "eco bal",
       "title": "Verifier ta balance",
       "command": "/eco bal",
@@ -97,7 +83,7 @@
       "description": "Ouvre le menu et reclame les commandes que tu as poste.",
       "categoryId": "economie",
       "access": "Joueur",
-      "aliases": ["/eco order claim"],
+      "aliases": [],
       "example": "/eco orders claim",
       "usages": [
         "Reclamer une commande completee",
@@ -105,15 +91,115 @@
       ]
     },
     {
+      "id": "/eco sell",
+      "title": "Vendre un item",
+      "command": "/eco sell <quantite>",
+      "description": "Vendre l'item en main au serveur au prix marche du serveur.",
+      "categoryId": "economie",
+      "access": "Joueur",
+      "aliases": ["/eco sell <quantite>"],
+      "example": "/eco sell 2",
+      "usages": ["Vendre un item", "Obtenir de l'argent"]
+    },
+    {
+      "id": "/eco pay",
+      "title": "Payer un joueur",
+      "command": "/eco pay <joueur> <montant>",
+      "description": "Envoie de l'argent a un joueur.",
+      "categoryId": "economie",
+      "access": "Joueur",
+      "aliases": ["/eco pay <joueur> <montant>"],
+      "example": "/eco pay Sara 100",
+      "usages": ["Payer un joueur", "Faire un echange rapide"]
+    },
+    {
+      "id": "/eco servershop",
+      "title": "Ouvrir le shop du serveur",
+      "command": "/eco servershop",
+      "description": "Ouvre le menu du shop du serveur.",
+      "categoryId": "economie",
+      "access": "Joueur",
+      "aliases": [""],
+      "example": "/eco servershop",
+      "usages": ["Acheter des items", "Voir les offres du serveur"]
+    },
+    {
+      "id": "/eco shop",
+      "title": "Ouvrir le shop joueur/marche",
+      "command": "/eco shop",
+      "description": "Ouvre le menu du marché des joueurs.",
+      "categoryId": "economie",
+      "access": "Joueur",
+      "aliases": [""],
+      "example": "/eco shop",
+      "usages": [
+        "Acheter des items non disponibles sur le shop du serveur",
+        "Acheter des items specifiques a d'autres joueurs"
+      ]
+    },
+    {
+      "id": "/eco shop list <prix>",
+      "title": "Mettre un item en vente",
+      "command": "/eco shop list <prix>",
+      "description": "Mets un item en vente sur le marché des joueurs.",
+      "categoryId": "economie",
+      "access": "Joueur",
+      "aliases": [""],
+      "example": "/eco shop list 10",
+      "usages": [
+        "Mettre un item en vente",
+        "Tirer des profits sur un objets rare ou en demande"
+      ]
+    },
+    {
+      "id": "/enderchest",
+      "title": "Ouvrir le coffre de l'ender",
+      "command": "/enderchest",
+      "description": "Ouvre le menu de ton coffre de l'ender.",
+      "categoryId": "inventaire",
+      "access": "Joueur",
+      "aliases": [""],
+      "example": "/enderchest",
+      "usages": [
+        "Stocker des items de manière sécurisée",
+        "Accéder à son inventaire portable"
+      ]
+    },
+    {
+      "id": "/exalt",
+      "title": "Obtiens un enchantement aleatoire",
+      "command": "/exalt",
+      "description": "Obtient un enchantement aléatoire pour ton item. Il faut tenir une exalt orb",
+      "categoryId": "inventaire",
+      "access": "Joueur",
+      "aliases": [""],
+      "example": "/exalt",
+      "usages": ["Améliorer un item de manière imprévisible"]
+    },
+    {
       "id": "sethome",
       "title": "Definir un home",
       "command": "/sethome <nom>",
       "description": "Cree un point de retour personnalise.",
       "categoryId": "teleport",
-      "access": "VIP",
+      "access": "Joueur",
       "aliases": [],
       "example": "/sethome base",
       "usages": ["Poser un point a la base", "Sauvegarder un spot de farm"]
+    },
+    {
+      "id": "delhome",
+      "title": "Supprimer un home",
+      "command": "/delhome <nom>",
+      "description": "Supprime un point de retour personnalise.",
+      "categoryId": "teleport",
+      "access": "Joueur",
+      "aliases": [],
+      "example": "/delhome base",
+      "usages": [
+        "Supprimer un home inutile",
+        "Reorganiser ses points de retour"
+      ]
     },
     {
       "id": "home",
@@ -121,7 +207,7 @@
       "command": "/home <nom>",
       "description": "Teleportation vers un point sauvegarde.",
       "categoryId": "teleport",
-      "access": "VIP",
+      "access": "Joueur",
       "aliases": [],
       "example": "/home base",
       "cooldown": "10s",
@@ -136,19 +222,93 @@
       "access": "Joueur",
       "aliases": [],
       "example": "/spawn",
-      "cooldown": "5s",
       "usages": ["Retrouver les PNJ", "Se replacer en zone safe"]
     },
     {
-      "id": "guild-invite",
-      "title": "Inviter un joueur",
-      "command": "/guild invite <joueur>",
-      "description": "Invite un joueur a rejoindre ta guilde.",
-      "categoryId": "guilde",
+      "id": "leaderboard",
+      "title": "Tableau des leaderboards",
+      "command": "/leaderboard <type>",
+      "description": "Affiche le classement des joueurs.",
+      "categoryId": "general",
       "access": "Joueur",
-      "aliases": ["/g invite <joueur>"],
-      "example": "/guild invite Sara",
-      "usages": ["Recruter un joueur", "Inviter un ami"]
+      "aliases": [],
+      "example": "/leaderboard",
+      "usages": ["Voir les meilleurs joueurs", "Comparer ses performances"]
+    },
+    {
+      "id": "ps player info",
+      "title": "Connaitre son niveau de difficulte",
+      "command": "/ps_player info",
+      "description": "Affiche la difficulte actuelle du joueur et les details de son progression.",
+      "categoryId": "general",
+      "access": "Joueur",
+      "aliases": [],
+      "example": "/ps_player info",
+      "usages": ["Voir sa difficulte", "Connaitre la difficulte de la zone"]
+    },
+    {
+      "id": "tpa",
+      "title": "Demander a se teleporter",
+      "command": "/tpa <joueur>",
+      "description": "Envoie une demande de téléportation à un joueur.",
+      "categoryId": "teleport",
+      "access": "Joueur",
+      "aliases": [],
+      "example": "/tpa <joueur>",
+      "usages": [
+        "Demander à un joueur de se téléporter vers lui",
+        "Rejoindre un ami rapidement"
+      ]
+    },
+    {
+      "id": "tpaccept",
+      "title": "Accepter une demande de téléportation",
+      "command": "/tpaccept",
+      "description": "Accepte une demande de téléportation envoyée par un autre joueur.",
+      "categoryId": "teleport",
+      "access": "Joueur",
+      "aliases": [],
+      "example": "/tpaccept",
+      "usages": ["Accepter une demande de téléportation", "Deplacer un joueur"]
+    },
+    {
+      "id": "tpdeny",
+      "title": "Refuser une demande de téléportation",
+      "command": "/tpdeny",
+      "description": "Refuse une demande de téléportation envoyée par un autre joueur.",
+      "categoryId": "teleport",
+      "access": "Joueur",
+      "aliases": [],
+      "example": "/tpdeny",
+      "usages": ["Refuser une demande de téléportation"]
+    },
+    {
+      "id": "tpahere",
+      "title": "Demander a se teleporter ici",
+      "command": "/tpahere <joueur>",
+      "description": "Envoie une demande de téléportation à un joueur, lui demandant de se téléporter vers vous.",
+      "categoryId": "teleport",
+      "access": "Joueur",
+      "aliases": [],
+      "example": "/tpahere <joueur>",
+      "usages": [
+        "Demander à un joueur de se téléporter vers vous",
+        "Attirer un ami de vous rejoindre"
+      ]
+    },
+    {
+      "id": "warp",
+      "title": "Se téléporter vers un point de warp",
+      "command": "/warp <nom>",
+      "description": "Téléporte le joueur vers un point de warp enregistré.",
+      "categoryId": "teleport",
+      "access": "Joueur",
+      "aliases": [],
+      "example": "/warp <nom>",
+      "usages": [
+        "Se déplacer rapidement entre zones",
+        "Accéder à des endroits spécifiques"
+      ]
     }
   ],
   "tips": [

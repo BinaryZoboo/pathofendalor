@@ -146,7 +146,11 @@ function DashboardPage({
           value={playersLabel}
           icon="groups"
         />
-        <MetricCard label="Ping moyen" value={pingLabel} icon="network_ping" />
+        <MetricCard
+          label="Ping serveur"
+          value={pingLabel}
+          icon="network_ping"
+        />
         <MetricCard label="Quetes quotidiennes" value="8" icon="task_alt" />
         <MetricCard
           label="Richesse Globale"
