@@ -275,23 +275,23 @@
     {
       "id": "tpaccept",
       "title": "Accepter une demande de téléportation",
-      "command": "/tpaccept",
+      "command": "/tpaccept <joueur>",
       "description": "Accepte une demande de téléportation envoyée par un autre joueur.",
       "categoryId": "teleport",
       "access": "Joueur",
       "aliases": [],
-      "example": "/tpaccept",
+      "example": "/tpaccept <joueur>",
       "usages": ["Accepter une demande de téléportation", "Deplacer un joueur"]
     },
     {
       "id": "tpdeny",
       "title": "Refuser une demande de téléportation",
-      "command": "/tpdeny",
+      "command": "/tpdeny <joueur>",
       "description": "Refuse une demande de téléportation envoyée par un autre joueur.",
       "categoryId": "teleport",
       "access": "Joueur",
       "aliases": [],
-      "example": "/tpdeny",
+      "example": "/tpdeny <joueur>",
       "usages": ["Refuser une demande de téléportation"]
     },
     {
@@ -309,18 +309,29 @@
       ]
     },
     {
-      "id": "warp",
+      "id": "warp tp",
       "title": "Se téléporter vers un point de warp",
-      "command": "/warp <nom>",
+      "command": "/warp tp <nom>",
       "description": "Téléporte le joueur vers un point de warp enregistré.",
       "categoryId": "teleport",
       "access": "Joueur",
       "aliases": [],
-      "example": "/warp <nom>",
+      "example": "/warp tp event",
       "usages": [
         "Se déplacer rapidement entre zones",
         "Accéder à des endroits spécifiques"
       ]
+    },
+    {
+      "id": "warp list",
+      "title": "Liste des warps",
+      "command": "/warp list",
+      "description": "Affiche la liste de tous les points de warp enregistrés.",
+      "categoryId": "teleport",
+      "access": "Joueur",
+      "aliases": [],
+      "example": "/warp list",
+      "usages": ["Voir tous les points de warp disponibles"]
     }
   ],
   "tips": [
