@@ -177,41 +177,53 @@
       "usages": ["Améliorer un item de manière imprévisible"]
     },
     {
-      "id": "sethome",
+      "id": "home set",
       "title": "Definir un home",
-      "command": "/sethome <nom>",
+      "command": "/home set <nom>",
       "description": "Cree un point de retour personnalise.",
       "categoryId": "teleport",
       "access": "Joueur",
       "aliases": [],
-      "example": "/sethome base",
+      "example": "/home set base",
       "usages": ["Poser un point a la base", "Sauvegarder un spot de farm"]
     },
     {
-      "id": "delhome",
+      "id": "home delete",
       "title": "Supprimer un home",
-      "command": "/delhome <nom>",
+      "command": "/home delete <nom>",
       "description": "Supprime un point de retour personnalise.",
       "categoryId": "teleport",
       "access": "Joueur",
       "aliases": [],
-      "example": "/delhome base",
+      "example": "/home delete base",
       "usages": [
         "Supprimer un home inutile",
         "Reorganiser ses points de retour"
       ]
     },
     {
-      "id": "home",
+      "id": "home tp",
       "title": "Retour a un home",
-      "command": "/home <nom>",
+      "command": "/home tp <nom>",
       "description": "Teleportation vers un point sauvegarde.",
       "categoryId": "teleport",
       "access": "Joueur",
       "aliases": [],
-      "example": "/home base",
+      "example": "/home tp base",
       "cooldown": "10s",
       "usages": ["Retour rapide apres raid", "Revenir au stockage"]
+    },
+    {
+      "id": "home list",
+      "title": "Liste des homes",
+      "command": "/home list",
+      "description": "Affiche la liste de tous les points de retour sauvegardes.",
+      "categoryId": "teleport",
+      "access": "Joueur",
+      "aliases": [],
+      "example": "/home list",
+      "cooldown": "10s",
+      "usages": ["Voir tous ses points de retour", "Gérer ses homes"]
     },
     {
       "id": "spawn",
