@@ -16,7 +16,7 @@ type CommandEntry = {
   command: string;
   description: string;
   categoryId: string;
-  access: "Joueur" | "VIP" | "Staff";
+  access: "IOI" | "VIP" | "DEV";
   aliases: string[];
   example?: string;
   cooldown?: string;
@@ -43,7 +43,7 @@ type CommandsPayload = {
 };
 
 const fallbackCommandsData: CommandsPayload = {
-  updatedAt: "2026-04-05",
+  updatedAt: "2026-04-09",
   hero: {
     eyebrow: "WIKI JOUEURS",
     title: "Commandes utiles",
@@ -83,7 +83,7 @@ const fallbackCommandsData: CommandsPayload = {
       description:
         "Retourne a l'emplacement precedent de ta derniere teleportation.",
       categoryId: "teleport",
-      access: "Joueur",
+      access: "IOI",
       aliases: ["/back"],
       example: "/back",
       usages: ["Erreur de position", "Echapper a une situation dangereuse"],
@@ -94,7 +94,7 @@ const fallbackCommandsData: CommandsPayload = {
       command: "/eco bal",
       description: "Consulte ton solde en direct.",
       categoryId: "economie",
-      access: "Joueur",
+      access: "IOI",
       aliases: ["/eco bal"],
       example: "/eco bal",
       usages: ["Verifier ton budget"],
@@ -105,7 +105,7 @@ const fallbackCommandsData: CommandsPayload = {
       command: "/eco daily",
       description: "Recois ton salaire quotidien.",
       categoryId: "economie",
-      access: "Joueur",
+      access: "IOI",
       aliases: [],
       example: "/eco daily",
       usages: ["Recevoir son salaire", "Collecter une recompense quotidienne"],
@@ -117,7 +117,7 @@ const fallbackCommandsData: CommandsPayload = {
       description:
         "Poster une demande d'achat pour un item specifique. IMPORTANT: Le nom de l'item doit etre son nom en anglais",
       categoryId: "economie",
-      access: "Joueur",
+      access: "IOI",
       aliases: ["/eco order request <item> <quantite> <prix>"],
       example: "/eco orders request iron_sword 1 10",
       usages: ["Trouver un item specifique"],
@@ -128,7 +128,7 @@ const fallbackCommandsData: CommandsPayload = {
       command: "/eco orders claim",
       description: "Ouvre le menu et reclame les commandes que tu as poste.",
       categoryId: "economie",
-      access: "Joueur",
+      access: "IOI",
       aliases: [],
       example: "/eco orders claim",
       usages: [
@@ -143,7 +143,7 @@ const fallbackCommandsData: CommandsPayload = {
       description:
         "Vendre l'item en main au serveur au prix marche du serveur.",
       categoryId: "economie",
-      access: "Joueur",
+      access: "IOI",
       aliases: ["/eco sell <quantite>"],
       example: "/eco sell 2",
       usages: ["Vendre un item", "Obtenir de l'argent"],
@@ -154,7 +154,7 @@ const fallbackCommandsData: CommandsPayload = {
       command: "/eco pay <joueur> <montant>",
       description: "Envoie de l'argent a un joueur.",
       categoryId: "economie",
-      access: "Joueur",
+      access: "IOI",
       aliases: ["/eco pay <joueur> <montant>"],
       example: "/eco pay Sara 100",
       usages: ["Payer un joueur", "Faire un echange rapide"],
@@ -165,7 +165,7 @@ const fallbackCommandsData: CommandsPayload = {
       command: "/eco servershop",
       description: "Ouvre le menu du shop du serveur.",
       categoryId: "economie",
-      access: "Joueur",
+      access: "IOI",
       aliases: [""],
       example: "/eco servershop",
       usages: ["Acheter des items", "Voir les offres du serveur"],
@@ -176,7 +176,7 @@ const fallbackCommandsData: CommandsPayload = {
       command: "/eco shop",
       description: "Ouvre le menu du marché des joueurs.",
       categoryId: "economie",
-      access: "Joueur",
+      access: "IOI",
       aliases: [""],
       example: "/eco shop",
       usages: [
@@ -190,7 +190,7 @@ const fallbackCommandsData: CommandsPayload = {
       command: "/eco shop list <prix>",
       description: "Mets un item en vente sur le marché des joueurs.",
       categoryId: "economie",
-      access: "Joueur",
+      access: "IOI",
       aliases: [""],
       example: "/eco shop list 10",
       usages: [
@@ -199,27 +199,13 @@ const fallbackCommandsData: CommandsPayload = {
       ],
     },
     {
-      id: "/enderchest",
-      title: "Ouvrir le coffre de l'ender",
-      command: "/enderchest",
-      description: "Ouvre le menu de ton coffre de l'ender.",
-      categoryId: "profil",
-      access: "Joueur",
-      aliases: [""],
-      example: "/enderchest",
-      usages: [
-        "Stocker des items de manière sécurisée",
-        "Accéder à son inventaire portable",
-      ],
-    },
-    {
-      id: "exalt",
+      id: "/exalt",
       title: "Obtiens un enchantement aleatoire",
       command: "/exalt",
       description:
         "Obtient un enchantement aléatoire pour ton item. Il faut tenir une exalt orb",
-      categoryId: "profil",
-      access: "Joueur",
+      categoryId: "inventaire",
+      access: "IOI",
       aliases: [""],
       example: "/exalt",
       usages: ["Améliorer un item de manière imprévisible"],
@@ -230,7 +216,7 @@ const fallbackCommandsData: CommandsPayload = {
       command: "/home set <nom>",
       description: "Cree un point de retour personnalise.",
       categoryId: "teleport",
-      access: "Joueur",
+      access: "IOI",
       aliases: [],
       example: "/home set base",
       usages: ["Poser un point a la base", "Sauvegarder un spot de farm"],
@@ -241,7 +227,7 @@ const fallbackCommandsData: CommandsPayload = {
       command: "/home delete <nom>",
       description: "Supprime un point de retour personnalise.",
       categoryId: "teleport",
-      access: "Joueur",
+      access: "IOI",
       aliases: [],
       example: "/home delete base",
       usages: ["Supprimer un home inutile", "Reorganiser ses points de retour"],
@@ -252,7 +238,7 @@ const fallbackCommandsData: CommandsPayload = {
       command: "/home tp <nom>",
       description: "Teleportation vers un point sauvegarde.",
       categoryId: "teleport",
-      access: "Joueur",
+      access: "IOI",
       aliases: [],
       example: "/home tp base",
       cooldown: "10s",
@@ -264,7 +250,7 @@ const fallbackCommandsData: CommandsPayload = {
       command: "/home list",
       description: "Affiche la liste de tous les points de retour sauvegardes.",
       categoryId: "teleport",
-      access: "Joueur",
+      access: "IOI",
       aliases: [],
       example: "/home list",
       cooldown: "10s",
@@ -276,21 +262,10 @@ const fallbackCommandsData: CommandsPayload = {
       command: "/spawn",
       description: "Retourne au spawn principal du serveur.",
       categoryId: "teleport",
-      access: "Joueur",
+      access: "IOI",
       aliases: [],
       example: "/spawn",
       usages: ["Retrouver les PNJ", "Se replacer en zone safe"],
-    },
-    {
-      id: "leaderboard",
-      title: "Tableau des leaderboards",
-      command: "/leaderboard <type>",
-      description: "Affiche le classement des joueurs.",
-      categoryId: "profil",
-      access: "Joueur",
-      aliases: [],
-      example: "/leaderboard",
-      usages: ["Voir les meilleurs joueurs", "Comparer ses performances"],
     },
     {
       id: "ps player info",
@@ -298,8 +273,8 @@ const fallbackCommandsData: CommandsPayload = {
       command: "/ps_player info",
       description:
         "Affiche la difficulte actuelle du joueur et les details de son progression.",
-      categoryId: "profil",
-      access: "Joueur",
+      categoryId: "general",
+      access: "IOI",
       aliases: [],
       example: "/ps_player info",
       usages: ["Voir sa difficulte", "Connaitre la difficulte de la zone"],
@@ -310,7 +285,7 @@ const fallbackCommandsData: CommandsPayload = {
       command: "/tpa <joueur>",
       description: "Envoie une demande de téléportation à un joueur.",
       categoryId: "teleport",
-      access: "Joueur",
+      access: "IOI",
       aliases: [],
       example: "/tpa <joueur>",
       usages: [
@@ -321,25 +296,25 @@ const fallbackCommandsData: CommandsPayload = {
     {
       id: "tpaccept",
       title: "Accepter une demande de téléportation",
-      command: "/tpaccept",
+      command: "/tpaccept <joueur>",
       description:
         "Accepte une demande de téléportation envoyée par un autre joueur.",
       categoryId: "teleport",
-      access: "Joueur",
+      access: "IOI",
       aliases: [],
-      example: "/tpaccept",
+      example: "/tpaccept <joueur>",
       usages: ["Accepter une demande de téléportation", "Deplacer un joueur"],
     },
     {
       id: "tpdeny",
       title: "Refuser une demande de téléportation",
-      command: "/tpdeny",
+      command: "/tpdeny <joueur>",
       description:
         "Refuse une demande de téléportation envoyée par un autre joueur.",
       categoryId: "teleport",
-      access: "Joueur",
+      access: "IOI",
       aliases: [],
-      example: "/tpdeny",
+      example: "/tpdeny <joueur>",
       usages: ["Refuser une demande de téléportation"],
     },
     {
@@ -349,7 +324,7 @@ const fallbackCommandsData: CommandsPayload = {
       description:
         "Envoie une demande de téléportation à un joueur, lui demandant de se téléporter vers vous.",
       categoryId: "teleport",
-      access: "Joueur",
+      access: "IOI",
       aliases: [],
       example: "/tpahere <joueur>",
       usages: [
@@ -358,17 +333,98 @@ const fallbackCommandsData: CommandsPayload = {
       ],
     },
     {
-      id: "warp",
+      id: "warp tp",
       title: "Se téléporter vers un point de warp",
-      command: "/warp <nom>",
+      command: "/warp tp <nom>",
       description: "Téléporte le joueur vers un point de warp enregistré.",
       categoryId: "teleport",
-      access: "Joueur",
+      access: "IOI",
       aliases: [],
-      example: "/warp <nom>",
+      example: "/warp tp event",
       usages: [
         "Se déplacer rapidement entre zones",
         "Accéder à des endroits spécifiques",
+      ],
+    },
+    {
+      id: "warp list",
+      title: "Liste des warps",
+      command: "/warp list",
+      description: "Affiche la liste de tous les points de warp enregistrés.",
+      categoryId: "teleport",
+      access: "IOI",
+      aliases: [],
+      example: "/warp list",
+      usages: ["Voir tous les points de warp disponibles"],
+    },
+    {
+      id: "workbench",
+      title: "Ouvrir un établi portable",
+      command: "/workbench",
+      description: "Ouvre le menu de ton établi portable.",
+      categoryId: "general",
+      access: "VIP",
+      aliases: [],
+      example: "/workbench",
+      usages: [
+        "Craft rapide en déplacement",
+        "Accéder à un établi sans en poser un",
+      ],
+    },
+    {
+      id: "grindstone",
+      title: "Ouvrir un grindstone portable",
+      command: "/grindstone",
+      description: "Ouvre le menu de ton grindstone portable.",
+      categoryId: "general",
+      access: "VIP",
+      aliases: [],
+      example: "/grindstone",
+      usages: [
+        "Désenchanter des items en déplacement",
+        "Accéder à un grindstone sans en poser un",
+      ],
+    },
+    {
+      id: "stonecutter",
+      title: "Ouvrir un stonecutter portable",
+      command: "/stonecutter",
+      description: "Ouvre le menu de ton stonecutter portable.",
+      categoryId: "general",
+      access: "VIP",
+      aliases: [],
+      example: "/stonecutter",
+      usages: [
+        "Couper des blocs en déplacement",
+        "Accéder à un stonecutter sans en poser un",
+      ],
+    },
+    {
+      id: "wastebin",
+      title: "Ouvrir une poubelle portable",
+      command: "/wastebin",
+      description: "Ouvre le menu de ta poubelle portable.",
+      categoryId: "general",
+      access: "VIP",
+      aliases: [],
+      example: "/wastebin",
+      usages: [
+        "Jeter des items en déplacement",
+        "Accéder à une poubelle sans en poser une",
+      ],
+    },
+    {
+      id: "/enderchest",
+      title: "Ouvrir le coffre de l'ender",
+      command: "/enderchest",
+      description: "Ouvre le menu de ton coffre de l'ender.",
+      categoryId: "inventaire",
+      access: "IOI",
+      aliases: [""],
+      example: "/enderchest",
+      usages: [
+        "Stocker des items de manière sécurisée",
+        "Accéder à son inventaire portable",
       ],
     },
   ],
@@ -391,7 +447,7 @@ const fallbackCommandsData: CommandsPayload = {
       id: "access",
       title: "Niveau d'acces",
       icon: "verified_user",
-      description: "Chaque commande indique son acces: Joueur, VIP ou Staff.",
+      description: "Chaque commande indique son acces: IOI ou VIP",
     },
   ],
 };
@@ -447,9 +503,9 @@ function parseCommandsPayload(payload: unknown): CommandsPayload {
         typeof command.command === "string" &&
         typeof command.description === "string" &&
         typeof command.categoryId === "string" &&
-        (command.access === "Joueur" ||
+        (command.access === "IOI" ||
           command.access === "VIP" ||
-          command.access === "Staff") &&
+          command.access === "DEV") &&
         Array.isArray(command.aliases) &&
         (typeof command.example === "undefined" ||
           typeof command.example === "string") &&
@@ -471,7 +527,7 @@ function parseCommandsPayload(payload: unknown): CommandsPayload {
 }
 
 function getAccessClass(access: CommandEntry["access"]): string {
-  if (access === "Staff") {
+  if (access === "DEV") {
     return "border-rose-300/55 bg-rose-500/16 text-rose-100";
   }
   if (access === "VIP") {
@@ -542,7 +598,7 @@ function CraftPage() {
 
   const playerCommandsCount = useMemo(
     () =>
-      commandsData.commands.filter((entry) => entry.access === "Joueur").length,
+      commandsData.commands.filter((entry) => entry.access === "IOI").length,
     [commandsData.commands],
   );
 
