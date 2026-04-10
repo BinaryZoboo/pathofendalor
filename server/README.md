@@ -38,6 +38,13 @@ Optional EconomyCraft over SFTP:
 - `ECONOMY_JSON_PATH`
 - `ECONOMY_CACHE_TTL_MS` (milliseconds, default 600000 = 10 minutes)
 
+Optional secure modpack download:
+
+- `MODPACK_FILE_PATH` (absolute path to the zip file)
+- `MODPACK_FILE_NAME` (download filename shown to users)
+- `MODPACK_DOWNLOAD_SECRET` (HMAC secret used to sign temporary links)
+- `MODPACK_DOWNLOAD_TTL_MS` (milliseconds, default 300000 = 5 minutes)
+
 Use either password mode OR key mode.
 
 ## 3) Start API
@@ -47,6 +54,11 @@ npm run api:dev
 Endpoint:
 
 GET http://localhost:8787/api/server-status
+
+Modpack download endpoints:
+
+- GET http://localhost:8787/api/modpack-download-link
+- GET http://localhost:8787/api/modpack-download?token=...
 
 ## 4) Start frontend
 
@@ -80,3 +92,4 @@ Vite proxies `/api/*` to the local API server in development.
 - Keep AMP and SFTP credentials server-side only.
 - `STATUS_CACHE_TTL_MS` avoids hammering AMP/SFTP.
 - If AMP is unavailable, the API falls back to direct Minecraft status lookup.
+- The modpack ZIP is never exposed as a permanent public file when `MODPACK_DOWNLOAD_SECRET` is configured.

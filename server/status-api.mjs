@@ -1,8 +1,10 @@
 import dotenv from "dotenv";
 import express from "express";
 import { status as minecraftStatus } from "minecraft-server-util";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname } from "node:path";
+import { createHmac, timingSafeEqual } from "node:crypto";
+import { createReadStream } from "node:fs";
+import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
+import { basename, dirname, extname } from "node:path";
 import SftpClient from "ssh2-sftp-client";
 
 dotenv.config();
@@ -13,6 +15,13 @@ const cacheTtlMs = Number(process.env.STATUS_CACHE_TTL_MS ?? 10000);
 const economyCacheTtlMs = Number(process.env.ECONOMY_CACHE_TTL_MS ?? 900000);
 const playerNameCacheTtlMs = Number(
   process.env.PLAYER_NAME_CACHE_TTL_MS ?? 86400000,
+);
+const modpackFilePath = process.env.MODPACK_FILE_PATH;
+const modpackFileName =
+  process.env.MODPACK_FILE_NAME ?? "Pathofendalor-Modpack.zip";
+const modpackDownloadSecret = process.env.MODPACK_DOWNLOAD_SECRET;
+const modpackDownloadTtlMs = Number(
+  process.env.MODPACK_DOWNLOAD_TTL_MS ?? 300000,
 );
 const enableMojangNameLookup =
   (process.env.ENABLE_MOJANG_NAME_LOOKUP ?? "true").toLowerCase() !== "false";
@@ -33,6 +42,71 @@ let cityHallListingHistory = null;
 function toNumber(value) {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : null;
+}
+
+function base64UrlEncode(value) {
+  return Buffer.from(value).toString("base64url");
+}
+
+function base64UrlDecode(value) {
+  return Buffer.from(value, "base64url").toString("utf-8");
+}
+
+function hasValidModpackConfig() {
+  return Boolean(modpackFilePath && modpackDownloadSecret);
+}
+
+function buildSignedModpackToken() {
+  if (!hasValidModpackConfig()) {
+    return null;
+  }
+
+  const expiresAt = Date.now() + modpackDownloadTtlMs;
+  const payload = JSON.stringify({ expiresAt });
+  const payloadPart = base64UrlEncode(payload);
+  const signature = createHmac("sha256", modpackDownloadSecret)
+    .update(payloadPart)
+    .digest("base64url");
+
+  return `${payloadPart}.${signature}`;
+}
+
+function verifySignedModpackToken(token) {
+  if (!hasValidModpackConfig() || !token) {
+    return false;
+  }
+
+  const parts = String(token).split(".");
+  if (parts.length !== 2) return false;
+
+  const [payloadPart, signaturePart] = parts;
+  const expectedSignature = createHmac("sha256", modpackDownloadSecret)
+    .update(payloadPart)
+    .digest();
+
+  let providedSignature;
+  try {
+    providedSignature = Buffer.from(signaturePart, "base64url");
+  } catch {
+    return false;
+  }
+
+  if (providedSignature.length !== expectedSignature.length) {
+    return false;
+  }
+
+  if (!timingSafeEqual(providedSignature, expectedSignature)) {
+    return false;
+  }
+
+  try {
+    const payload = JSON.parse(base64UrlDecode(payloadPart));
+    return (
+      Number.isFinite(payload.expiresAt) && Date.now() <= payload.expiresAt
+    );
+  } catch {
+    return false;
+  }
 }
 
 function unauthorized(req) {
@@ -921,6 +995,63 @@ const handleAuctionHouseSales = async (req, res) => {
 
 app.get("/api/auction-house-sales", handleAuctionHouseSales);
 app.get("/api/cityhall-sales", handleAuctionHouseSales);
+
+app.get("/api/modpack-download-link", (req, res) => {
+  const token = buildSignedModpackToken();
+
+  if (!token) {
+    return res.status(503).json({
+      error: "Modpack download is not configured",
+    });
+  }
+
+  return res.json({
+    url: `/api/modpack-download?token=${encodeURIComponent(token)}`,
+    expiresInMs: modpackDownloadTtlMs,
+  });
+});
+
+app.get("/api/modpack-download", async (req, res) => {
+  if (!verifySignedModpackToken(req.query.token)) {
+    return res.status(403).json({ error: "Invalid or expired download token" });
+  }
+
+  if (!modpackFilePath) {
+    return res.status(503).json({ error: "Modpack file is not configured" });
+  }
+
+  try {
+    const fileStats = await stat(modpackFilePath);
+    const downloadName =
+      modpackFileName ||
+      basename(modpackFilePath) ||
+      `modpack${extname(modpackFilePath) || ".zip"}`;
+
+    res.setHeader("Content-Type", "application/zip");
+    res.setHeader("Content-Length", String(fileStats.size));
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${downloadName}"`,
+    );
+    res.setHeader("Cache-Control", "no-store");
+
+    const stream = createReadStream(modpackFilePath);
+    stream.on("error", () => {
+      if (!res.headersSent) {
+        res.status(500).json({ error: "Failed to stream modpack file" });
+        return;
+      }
+      res.destroy();
+    });
+
+    stream.pipe(res);
+  } catch (error) {
+    return res.status(404).json({
+      error: "Modpack file not found",
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+});
 
 app.listen(port, () => {
   console.log(`[status-api] listening on http://localhost:${port}`);

@@ -43,8 +43,7 @@
       "sanction": "Suppression des gains + suspension + blacklist possible.",
       "examples": [
         "Prix appat puis retrait rapide",
-        "Item non conforme a l'annonce",
-        "Manipulation coordonnee de marche"
+        "Item non conforme a l'annonce"
       ]
     },
     {
@@ -66,7 +65,7 @@
       "category": "combat",
       "description": "Les modules donnant un avantage illegitime (x-ray, fly, speed) ne sont jamais autorises.",
       "sanction": "Ban direct selon gravite des preuves.",
-      "examples": ["Aim assist", "Reach anormal", "Auto potions scripts"]
+      "examples": ["Fly", "Auto food", "Auto potions scripts"]
     },
     {
       "id": "combat-2",
@@ -75,7 +74,7 @@
       "category": "combat",
       "description": "Le pvp reste libre, mais l'acharnement sur zone de spawn est sanctionnable.",
       "sanction": "Avertissement puis restriction pvp temporaire.",
-      "examples": ["Camp de respawn", "Chain kill en boucle"]
+      "examples": ["Camp le respawn", "Chain kill en boucle"]
     },
     {
       "id": "build-1",

@@ -10,12 +10,14 @@ import {
   ClassesPage,
   CraftPage,
   DashboardPage,
+  JoinServerPage,
   RulesPage,
 } from "./pages";
 import { type PageKey } from "./types/navigation";
 
 type ThemeKey = "dark" | "light";
 type PageContext = { subtitle: string; tag: string };
+const RULES_ACCEPTED_STORAGE_KEY = "poe-rules-accepted";
 
 const PAGE_TITLES: Record<PageKey, string> = {
   dashboard: "Dashboard",
@@ -24,6 +26,7 @@ const PAGE_TITLES: Record<PageKey, string> = {
   bestiary: "Boss & Loots",
   auctionhouse: "Hotel des ventes",
   rules: "Reglement",
+  join: "Guide installation",
 };
 
 const PAGE_CONTEXT: Record<PageKey, PageContext> = {
@@ -52,6 +55,10 @@ const PAGE_CONTEXT: Record<PageKey, PageContext> = {
     subtitle: "Valide les regles et debloque l'onboarding client.",
     tag: "CONFORMITE",
   },
+  join: {
+    subtitle: "Suis les etapes officielles pour installer le client modde.",
+    tag: "ONBOARDING",
+  },
 };
 
 function getPageFromHash(): PageKey {
@@ -63,7 +70,8 @@ function getPageFromHash(): PageKey {
     cleanHash === "classes" ||
     cleanHash === "bestiary" ||
     cleanHash === "auctionhouse" ||
-    cleanHash === "rules"
+    cleanHash === "rules" ||
+    cleanHash === "join"
   ) {
     return cleanHash;
   }
@@ -76,6 +84,9 @@ function getPageFromHash(): PageKey {
     return "auctionhouse";
   }
   if (cleanHash === "reglement") return "rules";
+  if (cleanHash === "installation" || cleanHash === "onboarding") {
+    return "join";
+  }
 
   return "dashboard";
 }
@@ -92,6 +103,9 @@ function getInitialTheme(): ThemeKey {
 
 function App() {
   const [page, setPage] = useState<PageKey>(() => getPageFromHash());
+  const [hasAcceptedRules, setHasAcceptedRules] = useState<boolean>(() => {
+    return window.localStorage.getItem(RULES_ACCEPTED_STORAGE_KEY) === "true";
+  });
   const [theme, setTheme] = useState<ThemeKey>(() => getInitialTheme());
   const [mousePos, setMousePos] = useState(() => ({
     x: window.innerWidth / 2,
@@ -110,6 +124,19 @@ function App() {
     document.documentElement.setAttribute("data-theme", theme);
     window.localStorage.setItem("oasis-theme", theme);
   }, [theme]);
+
+  useEffect(() => {
+    window.localStorage.setItem(
+      RULES_ACCEPTED_STORAGE_KEY,
+      hasAcceptedRules ? "true" : "false",
+    );
+  }, [hasAcceptedRules]);
+
+  useEffect(() => {
+    if (page === "join" && !hasAcceptedRules) {
+      window.location.hash = "rules";
+    }
+  }, [page, hasAcceptedRules]);
 
   useEffect(() => {
     const onPointerMove = (event: PointerEvent) => {
@@ -163,6 +190,10 @@ function App() {
   const pageContext = PAGE_CONTEXT[page];
 
   const goToPage = (nextPage: PageKey) => {
+    if (nextPage === "join" && !hasAcceptedRules) {
+      window.location.hash = "rules";
+      return;
+    }
     window.location.hash = nextPage;
   };
 
@@ -185,6 +216,7 @@ function App() {
         activePage={page}
         onNavigate={goToPage}
         theme={theme}
+        hasAcceptedRules={hasAcceptedRules}
         onToggleTheme={() =>
           setTheme((cur) => (cur === "dark" ? "light" : "dark"))
         }
@@ -234,10 +266,21 @@ function App() {
         {page === "classes" && <ClassesPage />}
         {page === "bestiary" && <BestiaryLootdropPage />}
         {page === "auctionhouse" && <AuctionHousePage />}
-        {page === "rules" && <RulesPage />}
+        {page === "rules" && (
+          <RulesPage
+            hasAcceptedRules={hasAcceptedRules}
+            onAcceptedRules={() => setHasAcceptedRules(true)}
+            onNavigate={goToPage}
+          />
+        )}
+        {page === "join" && hasAcceptedRules && <JoinServerPage />}
       </main>
 
-      <MobileBottomNav activePage={page} onNavigate={goToPage} />
+      <MobileBottomNav
+        activePage={page}
+        onNavigate={goToPage}
+        hasAcceptedRules={hasAcceptedRules}
+      />
     </div>
   );
 }

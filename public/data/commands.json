@@ -313,7 +313,7 @@
       "title": "Ouvrir un établi portable",
       "command": "/workbench",
       "description": "Ouvre le menu de ton établi portable.",
-      "categoryId": "general",
+      "categoryId": "profil",
       "access": "VIP",
       "aliases": [],
       "example": "/workbench",
@@ -327,7 +327,7 @@
       "title": "Ouvrir un grindstone portable",
       "command": "/grindstone",
       "description": "Ouvre le menu de ton grindstone portable.",
-      "categoryId": "general",
+      "categoryId": "profil",
       "access": "VIP",
       "aliases": [],
       "example": "/grindstone",
@@ -341,7 +341,7 @@
       "title": "Ouvrir un stonecutter portable",
       "command": "/stonecutter",
       "description": "Ouvre le menu de ton stonecutter portable.",
-      "categoryId": "general",
+      "categoryId": "profil",
       "access": "VIP",
       "aliases": [],
       "example": "/stonecutter",
@@ -355,7 +355,7 @@
       "title": "Ouvrir une poubelle portable",
       "command": "/wastebin",
       "description": "Ouvre le menu de ta poubelle portable.",
-      "categoryId": "general",
+      "categoryId": "profil",
       "access": "VIP",
       "aliases": [],
       "example": "/wastebin",
@@ -369,7 +369,7 @@
       "title": "Ouvrir le coffre de l'ender",
       "command": "/enderchest",
       "description": "Ouvre le menu de ton coffre de l'ender.",
-      "categoryId": "inventaire",
+      "categoryId": "profil",
       "access": "IOI",
       "aliases": [""],
       "example": "/enderchest",
@@ -377,26 +377,6 @@
         "Stocker des items de manière sécurisée",
         "Accéder à son inventaire portable"
       ]
-    }
-  ],
-  "tips": [
-    {
-      "id": "quick-copy",
-      "title": "Copie instantanee",
-      "icon": "content_copy",
-      "description": "Utilise le bouton copier pour envoyer vite les commandes en jeu."
-    },
-    {
-      "id": "search",
-      "title": "Recherche rapide",
-      "icon": "manage_search",
-      "description": "Tape un mot-cle, un alias ou une commande pour filtrer la liste."
-    },
-    {
-      "id": "access",
-      "title": "Niveau d'acces",
-      "icon": "verified_user",
-      "description": "Chaque commande indique son acces: IOI ou VIP"
     }
   ]
 }

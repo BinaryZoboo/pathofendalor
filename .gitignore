@@ -15,6 +15,10 @@ dist-ssr
 .env.*
 !.env.example
 
+
+# Generated modpack archive (too large for GitHub)
+modpack/pathofendalor_modpack.zip
+modpack/*.zip
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

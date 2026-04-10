@@ -8,6 +8,7 @@ import {
 
 import heroReglement from "../assets/herobg/reglement.webp";
 import PageHero from "../components/PageHero";
+import { type PageKey } from "../types/navigation";
 
 type RuleSeverity = "info" | "warning" | "strict";
 type RuleCategory = "respect" | "economy" | "combat" | "build";
@@ -155,77 +156,7 @@ type RulesPayload = {
   rules: RuleItem[];
 };
 
-type ClientSetupStep = {
-  id: string;
-  title: string;
-  icon: string;
-  description: string;
-  details: string[];
-};
-
-const CLIENT_PACK_URL: string | null = null;
 const HOLD_TO_ACCEPT_MS = 2000;
-
-const clientSetupSteps: ClientSetupStep[] = [
-  {
-    id: "java",
-    title: "Installer Java 21",
-    icon: "deployed_code",
-    description:
-      "Installe Java 21 (JDK ou JRE) pour garantir la compatibilite avec le client modde.",
-    details: [
-      "Verifie la version avec: java -version",
-      "Redemarre ton launcher apres installation",
-    ],
-  },
-  {
-    id: "launcher",
-    title: "Configurer le launcher",
-    icon: "rocket_launch",
-    description:
-      "Télécharge le launcher client de Neoforge sur le site officiel pour gerer proprement les mods.",
-    details: [
-      "voici le lien: https://neoforged.net/",
-      "Derniere version stable",
-    ],
-  },
-  {
-    id: "version",
-    title: "Version Minecraft cible",
-    icon: "tune",
-    description:
-      "Sélectionne la version serveur 1.21.1, puis active le loader.",
-    details: [
-      "Ne melange pas deux loaders differents",
-      "Conserve un profil propre pour eviter les conflits",
-    ],
-  },
-  {
-    id: "files",
-    title: "Installer mods et fichiers",
-    icon: "folder_zip",
-    description:
-      "Telecharge le pack client puis importe le profil, ou copie les fichiers mods, config, resourcepacks, kubejs dans l'instance.",
-    details: [
-      "Pour creer les fichiers mod dans minecraft lance une premiere fois ton client",
-      "Mods dans le dossier mods",
-      "Configs dans le dossier config",
-      "Resourcepacks dans le dossier resourcepacks",
-      "KubeJS dans le dossier kubejs",
-    ],
-  },
-  {
-    id: "check",
-    title: "Verification finale",
-    icon: "verified",
-    description:
-      "Lance une premiere session locale (Nouveau monde solo), puis rejoins le serveur pour verifier que tous les assets se chargent sans erreur.",
-    details: [
-      "IP serveur: srv1319801.hstgr.cloud:25565",
-      "Si crash: retire les mods externes non officiels",
-    ],
-  },
-];
 
 function isValidRuleCategory(value: string): value is RuleCategory {
   return (
@@ -364,14 +295,22 @@ function RuleCard({ item }: { item: RuleItem }) {
   );
 }
 
-function RulesPage() {
+function RulesPage({
+  hasAcceptedRules,
+  onAcceptedRules,
+  onNavigate,
+}: {
+  hasAcceptedRules: boolean;
+  onAcceptedRules: () => void;
+  onNavigate: (nextPage: PageKey) => void;
+}) {
   const [rulesData, setRulesData] = useState<RuleItem[]>(fallbackRules);
   const [loadingRules, setLoadingRules] = useState(true);
   const [rulesError, setRulesError] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<RuleCategory | "all">(
     "all",
   );
-  const [hasAcceptedRules, setHasAcceptedRules] = useState(false);
+  const [acceptedLocal, setAcceptedLocal] = useState(hasAcceptedRules);
   const [isHoldingAccept, setIsHoldingAccept] = useState(false);
   const [acceptHoldProgress, setAcceptHoldProgress] = useState(0);
   const acceptFrameRef = useRef<number | null>(null);
@@ -440,7 +379,13 @@ function RulesPage() {
   ).length;
 
   useEffect(() => {
-    acceptedRef.current = hasAcceptedRules;
+    acceptedRef.current = acceptedLocal;
+  }, [acceptedLocal]);
+
+  useEffect(() => {
+    if (hasAcceptedRules) {
+      setAcceptedLocal(true);
+    }
   }, [hasAcceptedRules]);
 
   useEffect(() => {
@@ -489,7 +434,8 @@ function RulesPage() {
 
     if (nextProgress >= 1) {
       acceptedRef.current = true;
-      setHasAcceptedRules(true);
+      setAcceptedLocal(true);
+      onAcceptedRules();
       setIsHoldingAccept(false);
       acceptFrameRef.current = null;
       return;
@@ -705,7 +651,7 @@ function RulesPage() {
                 } as CSSProperties
               }
               className={`rules-accept-btn game-chip rounded-full px-5 py-2.5 font-label text-[11px] tracking-[0.15em] transition ${
-                hasAcceptedRules
+                acceptedLocal
                   ? "game-chip-active text-(--on-background)"
                   : "hover:border-(--primary)/55 hover:text-(--on-background)"
               }`}
@@ -716,7 +662,7 @@ function RulesPage() {
                 aria-hidden="true"
               />
               <span className="relative z-1">
-                {hasAcceptedRules
+                {acceptedLocal
                   ? "REGLEMENT ACCEPTE"
                   : isHoldingAccept
                     ? `MAINTIENS... ${Math.max(1, Math.round(acceptHoldProgress * 100))}%`
@@ -725,107 +671,32 @@ function RulesPage() {
             </button>
           </div>
 
-          {!hasAcceptedRules && (
+          {!acceptedLocal && (
             <p className="text-xs text-(--muted)">
               Maintiens le bouton enfonce pendant 2 secondes pour debloquer le
-              guide d'installation.
+              guide d'installation dans le menu.
             </p>
           )}
+
+          {acceptedLocal && (
+            <div className="mt-2 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-(--primary)/35 bg-(--primary)/10 p-4">
+              <p className="text-sm text-(--on-background)">
+                Onboarding debloque. Une nouvelle section "Guide installation"
+                est maintenant disponible dans le menu.
+              </p>
+              <button
+                type="button"
+                onClick={() => onNavigate("join")}
+                className="game-chip game-chip-active inline-flex items-center gap-2 rounded-full px-4 py-2 font-label text-[11px] tracking-[0.15em] text-(--on-background)"
+              >
+                <span className="material-symbols-outlined text-base">
+                  rocket_launch
+                </span>
+                OUVRIR LE GUIDE
+              </button>
+            </div>
+          )}
         </article>
-
-        {hasAcceptedRules && (
-          <article className="premium-surface shimmer-border fade-in-up rounded-2xl p-5 md:p-6">
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <p className="font-label text-[10px] tracking-[0.16em] text-(--primary)">
-                  INSTALLATION CLIENT
-                </p>
-                <h3 className="mt-1 font-headline text-3xl font-bold tracking-tight">
-                  Guide d'installation Minecraft
-                </h3>
-                <p className="mt-2 max-w-2xl text-sm text-(--muted)">
-                  Suis ces etapes pour installer proprement le client et
-                  rejoindre le serveur sans conflit de mods.
-                </p>
-              </div>
-
-              <span className="game-chip game-chip-active rounded-full px-3 py-1 font-label text-[10px] tracking-[0.14em] text-(--on-background)">
-                ONBOARDING DEBLOQUE
-              </span>
-            </div>
-
-            <div className="my-5 hud-divider" />
-
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-              {clientSetupSteps.map((step, index) => (
-                <article
-                  key={step.id}
-                  className="game-panel premium-lift rounded-xl p-4"
-                >
-                  <div className="flex items-start gap-3">
-                    <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-(--primary)/16 font-label text-[10px] tracking-[0.14em] text-(--primary)">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-
-                    <div className="min-w-0">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="material-symbols-outlined text-(--primary)">
-                          {step.icon}
-                        </span>
-                        <h4 className="font-headline text-xl font-bold">
-                          {step.title}
-                        </h4>
-                      </div>
-
-                      <p className="mt-2 text-sm text-(--muted)">
-                        {step.description}
-                      </p>
-
-                      <ul className="mt-3 space-y-1.5 text-sm text-(--muted)">
-                        {step.details.map((detail) => (
-                          <li key={detail} className="flex items-start gap-2">
-                            <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-(--primary)" />
-                            <span>{detail}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-
-            <div className="mt-5 flex flex-wrap items-center gap-3">
-              {CLIENT_PACK_URL ? (
-                <a
-                  href={CLIENT_PACK_URL}
-                  className="game-chip game-chip-active inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-label text-[11px] tracking-[0.15em] text-(--on-background) transition hover:-translate-y-px"
-                >
-                  <span className="material-symbols-outlined text-base">
-                    download
-                  </span>
-                  TELECHARGER LES MODS ET FICHIERS NECESSAIRES
-                </a>
-              ) : (
-                <button
-                  type="button"
-                  disabled
-                  className="game-chip inline-flex cursor-not-allowed items-center gap-2 rounded-full px-5 py-2.5 font-label text-[11px] tracking-[0.15em] text-(--muted) opacity-75"
-                >
-                  <span className="material-symbols-outlined text-base">
-                    hourglass_top
-                  </span>
-                  PACK CLIENT BIENTOT DISPONIBLE
-                </button>
-              )}
-
-              <span className="text-xs text-(--muted)">
-                Le bouton de telechargement sera actif des que le pack officiel
-                sera configure.
-              </span>
-            </div>
-          </article>
-        )}
       </section>
     </section>
   );

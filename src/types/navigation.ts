@@ -4,4 +4,5 @@ export type PageKey =
   | "classes"
   | "bestiary"
   | "auctionhouse"
-  | "rules";
+  | "rules"
+  | "join";

@@ -35,11 +35,13 @@ function SidePanel({
   onNavigate,
   theme,
   onToggleTheme,
+  hasAcceptedRules,
 }: {
   activePage: PageKey;
   onNavigate: (nextPage: PageKey) => void;
   theme: "dark" | "light";
   onToggleTheme: () => void;
+  hasAcceptedRules: boolean;
 }) {
   const [wipeCountdown, setWipeCountdown] = useState(() => {
     return formatMonthlyCountdown(getMsUntilNextMonth(new Date()));
@@ -61,6 +63,14 @@ function SidePanel({
     { key: "auctionhouse", label: "Hotel des ventes", icon: "storefront" },
     { key: "rules", label: "Règlement", icon: "gavel" },
   ];
+
+  if (hasAcceptedRules) {
+    items.push({
+      key: "join",
+      label: "Guide installation",
+      icon: "rocket_launch",
+    });
+  }
 
   return (
     <aside className="fixed bottom-0 left-0 top-0 z-40 hidden w-72 overflow-hidden lg:block">

@@ -48,6 +48,10 @@ const PAGE_PARTICLE_THEME: Record<PageKey, ParticleTheme> = {
     colors: ["#a78bfa", "#8b5cf6", "#60a5fa", "#2dd4bf"],
     shapes: ["diamond", "round", "square", "streak"],
   },
+  join: {
+    colors: ["#60a5fa", "#22d3ee", "#34d399", "#facc15"],
+    shapes: ["streak", "round", "square", "diamond"],
+  },
 };
 
 function seededRandom(seed: number) {
