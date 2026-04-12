@@ -113,6 +113,7 @@ function App() {
   }));
   const [serverOnline, setServerOnline] = useState<boolean>(false);
   const rafRef = useRef<number | null>(null);
+  const mainContentRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const onHashChange = () => setPage(getPageFromHash());
@@ -137,6 +138,11 @@ function App() {
       window.location.hash = "rules";
     }
   }, [page, hasAcceptedRules]);
+
+  useEffect(() => {
+    mainContentRef.current?.scrollTo({ top: 0, behavior: "auto" });
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [page]);
 
   useEffect(() => {
     const onPointerMove = (event: PointerEvent) => {
@@ -222,7 +228,10 @@ function App() {
         }
       />
 
-      <main className="relative z-10 h-full overflow-y-auto px-4 pb-24 pt-6 md:px-8 md:pb-12 lg:ml-72 lg:px-10 lg:pt-8">
+      <main
+        ref={mainContentRef}
+        className="relative z-10 h-full overflow-y-auto px-4 pb-24 pt-6 md:px-8 md:pb-12 lg:ml-72 lg:px-10 lg:pt-8"
+      >
         <section className="fade-in-up mb-8">
           <header className="premium-surface shimmer-border relative overflow-hidden rounded-3xl p-6 md:p-8">
             <div className="pointer-events-none absolute -right-18 -top-16 h-52 w-52 rounded-full bg-(--primary)/14 blur-3xl" />

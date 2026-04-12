@@ -649,207 +649,217 @@ function BestiaryLootdropPage() {
           <div className="game-panel rounded-xl p-5 text-(--muted)">
             Aucun boss ne correspond a ces filtres. Ajuste la menace ou la zone.
           </div>
-        ) : null}
-
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
-          <section className="relative rounded-2xl border border-(--outline-variant)/45 bg-linear-to-b from-(--surface-container-high)/70 to-(--surface-container-low) p-5 shadow-(--soft-shadow) lg:col-span-8 lg:flex lg:min-h-168 lg:h-full lg:flex-col">
-            <img
-              src={
-                BOSS_IMAGE_MAP[selectedBoss.name] ||
-                selectedTheme.backgroundImage
-              }
-              alt={selectedBoss.name}
-              className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
-                isBossRevealActive ? "opacity-100" : "opacity-50"
-              }`}
-            />
-            <div
-              className={`pointer-events-none absolute inset-0 bg-linear-to-br from-(--surface-container-high)/64 via-(--surface-container-low)/52 to-(--surface-container-low)/72 transition-opacity duration-300 ${
-                isBossRevealActive ? "opacity-0" : "opacity-100"
-              }`}
-            />
-
-            <div className="relative z-10 flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <p className="font-label text-[10px] tracking-[0.16em] text-(--primary)">
-                  BOSS PRINCIPAL
-                </p>
-                <h3
-                  onMouseEnter={() => setIsBossRevealActive(true)}
-                  onMouseLeave={() => setIsBossRevealActive(false)}
-                  className="mt-2 font-headline text-3xl font-bold tracking-tight md:text-4xl"
-                >
-                  {selectedBoss.name}
-                </h3>
-                <p className="mt-2 text-sm text-(--muted)">
-                  {selectedBoss.titre}
-                </p>
-              </div>
-
-              <span
-                className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 font-label text-[10px] tracking-[0.14em] transition-opacity duration-300 ${selectedMenace.badgeClass} ${
+        ) : (
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
+            <section className="relative rounded-2xl border border-(--outline-variant)/45 bg-linear-to-b from-(--surface-container-high)/70 to-(--surface-container-low) p-5 shadow-(--soft-shadow) lg:col-span-8 lg:flex lg:min-h-168 lg:h-full lg:flex-col">
+              <img
+                src={
+                  BOSS_IMAGE_MAP[selectedBoss.name] ||
+                  selectedTheme.backgroundImage
+                }
+                alt={selectedBoss.name}
+                className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
+                  isBossRevealActive ? "opacity-100" : "opacity-50"
+                }`}
+              />
+              <div
+                className={`pointer-events-none absolute inset-0 bg-linear-to-br from-(--surface-container-high)/64 via-(--surface-container-low)/52 to-(--surface-container-low)/72 transition-opacity duration-300 ${
                   isBossRevealActive ? "opacity-0" : "opacity-100"
                 }`}
-              >
-                <span className={selectedMenace.markerClass} />
-                <span className="material-symbols-outlined text-[14px]">
-                  {selectedMenace.icon}
-                </span>
-                <span>
-                  Menace {selectedBoss.menace} // {selectedMenace.sigil}
-                </span>
-              </span>
-            </div>
+              />
 
-            <div
-              className={`relative z-10 mt-6 grid grid-cols-1 gap-4 transition-opacity duration-300 sm:grid-cols-2 ${
-                isBossRevealActive ? "opacity-0" : "opacity-100"
-              }`}
-            >
-              <StatLine
-                label="Point de vie"
-                value={selectedBoss.pointDeVie}
-                icon="favorite"
-              />
-              <StatLine
-                label="Armure"
-                value={selectedBoss.armure}
-                icon="shield"
-              />
-              <StatLine
-                label="Difficulte moyenne"
-                value={selectedBoss.difficulte}
-                icon="fitness_center"
-              />
-              <StatLine
-                label="Zone d'apparition"
-                value={selectedBoss.zoneApparition}
-                icon="map"
-              />
-            </div>
-
-            <div
-              className={`relative z-10 mt-6 game-panel rounded-xl p-5 transition-opacity duration-300 ${
-                isBossRevealActive ? "opacity-0" : "opacity-100"
-              }`}
-            >
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-(--primary)">
-                    auto_stories
-                  </span>
-                  <p className="font-label text-[11px] tracking-[0.16em] text-(--primary)">
-                    Enchanted book droppables
+              <div className="relative z-10 flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <p className="font-label text-[10px] tracking-[0.16em] text-(--primary)">
+                    BOSS PRINCIPAL
+                  </p>
+                  <div className="group mt-2 cursor-grab active:cursor-grabbing">
+                    <h3
+                      onMouseEnter={() => setIsBossRevealActive(true)}
+                      onMouseLeave={() => setIsBossRevealActive(false)}
+                      className="font-headline text-3xl font-bold tracking-tight md:text-4xl transition-all duration-300 group-hover:text-(--secondary) animate-pulse group-hover:animate-none"
+                    >
+                      {selectedBoss.name}
+                    </h3>
+                    <div className="mt-1 flex items-center gap-2 text-xs text-(--secondary) opacity-60 group-hover:opacity-0 transition-opacity duration-300">
+                      <span className="material-symbols-outlined text-sm animate-bounce">
+                        touch_app
+                      </span>
+                      <span>Survole pour révéler</span>
+                    </div>
+                  </div>
+                  <p className="mt-2 text-sm text-(--muted)">
+                    {selectedBoss.titre}
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2 text-[10px] font-label tracking-[0.14em] text-(--muted)">
-                  <span className="game-chip px-2 py-1 text-fuchsia-200">
-                    Critique: {criticalLoots}
+                <span
+                  className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 font-label text-[10px] tracking-[0.14em] transition-opacity duration-300 ${selectedMenace.badgeClass} ${
+                    isBossRevealActive ? "opacity-0" : "opacity-100"
+                  }`}
+                >
+                  <span className={selectedMenace.markerClass} />
+                  <span className="material-symbols-outlined text-[14px]">
+                    {selectedMenace.icon}
                   </span>
-                  <span className="game-chip px-2 py-1 text-amber-200">
-                    Majeur: {majorLoots}
+                  <span>
+                    Menace {selectedBoss.menace} // {selectedMenace.sigil}
                   </span>
-                </div>
+                </span>
               </div>
 
-              <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {selectedLoots.map((loot) => {
-                  const tierMeta = LOOT_TIER_META[loot.tier];
-                  return (
-                    <li
-                      key={loot.title}
-                      className="game-panel premium-lift rounded-lg px-4 py-3 text-base text-(--on-background)"
-                    >
-                      <div className="flex items-start justify-between gap-2">
-                        <div>
-                          <p className="text-sm text-(--muted)">
-                            Enchanted Book
-                          </p>
-                          <p className="mt-0.5 font-headline text-lg font-bold leading-tight">
-                            {loot.enchant}
-                          </p>
-                        </div>
+              <div
+                className={`relative z-10 mt-6 grid grid-cols-1 gap-4 transition-opacity duration-300 sm:grid-cols-2 ${
+                  isBossRevealActive ? "opacity-0" : "opacity-100"
+                }`}
+              >
+                <StatLine
+                  label="Point de vie"
+                  value={selectedBoss.pointDeVie}
+                  icon="favorite"
+                />
+                <StatLine
+                  label="Armure"
+                  value={selectedBoss.armure}
+                  icon="shield"
+                />
+                <StatLine
+                  label="Difficulte moyenne"
+                  value={selectedBoss.difficulte}
+                  icon="fitness_center"
+                />
+                <StatLine
+                  label="Zone d'apparition"
+                  value={selectedBoss.zoneApparition}
+                  icon="map"
+                />
+              </div>
 
-                        <span
-                          title={tierMeta.hint}
-                          className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 font-label text-[9px] tracking-[0.12em] ${tierMeta.badgeClass}`}
-                        >
-                          <span className="material-symbols-outlined text-[12px]">
-                            {tierMeta.icon}
+              <div
+                className={`relative z-10 mt-6 game-panel rounded-xl p-5 transition-opacity duration-300 ${
+                  isBossRevealActive ? "opacity-0" : "opacity-100"
+                }`}
+              >
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-(--primary)">
+                      auto_stories
+                    </span>
+                    <p className="font-label text-[11px] tracking-[0.16em] text-(--primary)">
+                      Enchanted book droppables
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-[10px] font-label tracking-[0.14em] text-(--muted)">
+                    <span className="game-chip px-2 py-1 text-fuchsia-200">
+                      Critique: {criticalLoots}
+                    </span>
+                    <span className="game-chip px-2 py-1 text-amber-200">
+                      Majeur: {majorLoots}
+                    </span>
+                  </div>
+                </div>
+
+                <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {selectedLoots.map((loot) => {
+                    const tierMeta = LOOT_TIER_META[loot.tier];
+                    return (
+                      <li
+                        key={loot.title}
+                        className="game-panel premium-lift rounded-lg px-4 py-3 text-base text-(--on-background)"
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <p className="text-sm text-(--muted)">
+                              Enchanted Book
+                            </p>
+                            <p className="mt-0.5 font-headline text-lg font-bold leading-tight">
+                              {loot.enchant}
+                            </p>
+                          </div>
+
+                          <span
+                            title={tierMeta.hint}
+                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 font-label text-[9px] tracking-[0.12em] ${tierMeta.badgeClass}`}
+                          >
+                            <span className="material-symbols-outlined text-[12px]">
+                              {tierMeta.icon}
+                            </span>
+                            {loot.tier}
                           </span>
-                          {loot.tier}
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </section>
+
+            <aside className="game-panel relative rounded-2xl p-4 lg:col-span-4 lg:flex lg:max-h-172 lg:flex-col lg:h-full">
+              <h4 className="font-headline text-xl font-bold">
+                Liste des boss
+              </h4>
+              <p className="mt-1 text-sm text-(--muted)">
+                Cliquez un nom pour afficher sa fiche principale.
+              </p>
+
+              <div className="boss-list-scroll mt-4 space-y-2 overflow-y-auto pr-1 lg:flex-1">
+                {filteredBosses.map((boss, index) => {
+                  const isActive = boss.name === selectedBoss.name;
+                  const theme = THEME_META[getBossTheme(boss.zoneApparition)];
+                  return (
+                    <button
+                      key={boss.name}
+                      onClick={() => setSelectedBossName(boss.name)}
+                      aria-pressed={isActive}
+                      className={`group relative w-full overflow-hidden rounded-xl border px-3 py-3 text-left transition ${
+                        isActive
+                          ? "border-(--primary)/55 text-(--on-background)"
+                          : "border-(--outline-variant)/45 text-(--muted) hover:border-(--primary)/30 hover:text-(--on-background)"
+                      }`}
+                    >
+                      <img
+                        src={BOSS_IMAGE_MAP[boss.name] || theme.thumbImage}
+                        alt={boss.name}
+                        className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition ${
+                          isActive
+                            ? "opacity-45"
+                            : "opacity-30 group-hover:opacity-38"
+                        }`}
+                      />
+
+                      <div
+                        className={`pointer-events-none absolute inset-0 ${
+                          isActive
+                            ? "bg-linear-to-r from-(--surface-container-low)/38 to-(--surface-container-low)/58"
+                            : "bg-linear-to-r from-(--surface-container-low)/52 to-(--surface-container-low)/70"
+                        }`}
+                      />
+
+                      <div className="relative z-10">
+                        <span className="font-label text-[10px] tracking-[0.14em] opacity-80">
+                          {String(index + 1).padStart(2, "0")}
                         </span>
+
+                        <p className="mt-1 font-headline text-lg font-bold leading-tight">
+                          {boss.name}
+                        </p>
+                        <p className="mt-1 text-xs text-(--muted)">
+                          {boss.zoneApparition}
+                        </p>
                       </div>
-                    </li>
+                      <span
+                        className={`absolute bottom-0 left-0 z-10 h-0.5 bg-(--primary) transition-all ${
+                          isActive ? "w-full" : "w-0 group-hover:w-2/3"
+                        }`}
+                      />
+                    </button>
                   );
                 })}
-              </ul>
-            </div>
-          </section>
-
-          <aside className="game-panel relative rounded-2xl p-4 lg:col-span-4 lg:flex lg:max-h-172 lg:flex-col lg:h-full">
-            <h4 className="font-headline text-xl font-bold">Liste des boss</h4>
-            <p className="mt-1 text-sm text-(--muted)">
-              Cliquez un nom pour afficher sa fiche principale.
-            </p>
-
-            <div className="boss-list-scroll mt-4 space-y-2 overflow-y-auto pr-1 lg:flex-1">
-              {filteredBosses.map((boss, index) => {
-                const isActive = boss.name === selectedBoss.name;
-                const theme = THEME_META[getBossTheme(boss.zoneApparition)];
-                return (
-                  <button
-                    key={boss.name}
-                    onClick={() => setSelectedBossName(boss.name)}
-                    aria-pressed={isActive}
-                    className={`group relative w-full overflow-hidden rounded-xl border px-3 py-3 text-left transition ${
-                      isActive
-                        ? "border-(--primary)/55 text-(--on-background)"
-                        : "border-(--outline-variant)/45 text-(--muted) hover:border-(--primary)/30 hover:text-(--on-background)"
-                    }`}
-                  >
-                    <img
-                      src={BOSS_IMAGE_MAP[boss.name] || theme.thumbImage}
-                      alt={boss.name}
-                      className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition ${
-                        isActive
-                          ? "opacity-45"
-                          : "opacity-30 group-hover:opacity-38"
-                      }`}
-                    />
-
-                    <div
-                      className={`pointer-events-none absolute inset-0 ${
-                        isActive
-                          ? "bg-linear-to-r from-(--surface-container-low)/38 to-(--surface-container-low)/58"
-                          : "bg-linear-to-r from-(--surface-container-low)/52 to-(--surface-container-low)/70"
-                      }`}
-                    />
-
-                    <div className="relative z-10">
-                      <span className="font-label text-[10px] tracking-[0.14em] opacity-80">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-
-                      <p className="mt-1 font-headline text-lg font-bold leading-tight">
-                        {boss.name}
-                      </p>
-                      <p className="mt-1 text-xs text-(--muted)">
-                        {boss.zoneApparition}
-                      </p>
-                    </div>
-                    <span
-                      className={`absolute bottom-0 left-0 z-10 h-0.5 bg-(--primary) transition-all ${
-                        isActive ? "w-full" : "w-0 group-hover:w-2/3"
-                      }`}
-                    />
-                  </button>
-                );
-              })}
-            </div>
-          </aside>
-        </div>
+              </div>
+            </aside>
+          </div>
+        )}
       </article>
     </section>
   );

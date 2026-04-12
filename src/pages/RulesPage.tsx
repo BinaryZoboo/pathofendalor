@@ -457,6 +457,11 @@ function RulesPage({
     acceptFrameRef.current = window.requestAnimationFrame(runAcceptHoldFrame);
   };
 
+  const scrollToSection = (sectionId: string) => {
+    const target = document.getElementById(sectionId);
+    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <section className="space-y-6">
       <PageHero
@@ -467,18 +472,20 @@ function RulesPage({
         imageSrc={heroReglement}
         actions={
           <>
-            <a
-              href="#liste-regles"
+            <button
+              type="button"
+              onClick={() => scrollToSection("liste-regles")}
               className="game-chip game-chip-active rounded-full px-5 py-2.5 font-label text-[11px] tracking-[0.15em] text-(--on-background) transition hover:-translate-y-px"
             >
               VOIR LES REGLES
-            </a>
-            <a
-              href="#barre-filtres"
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection("barre-filtres")}
               className="game-chip rounded-full px-5 py-2.5 font-label text-[11px] tracking-[0.15em] transition hover:border-(--primary)/50"
             >
               FILTRES
-            </a>
+            </button>
           </>
         }
       />

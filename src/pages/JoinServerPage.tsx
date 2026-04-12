@@ -84,12 +84,21 @@ const clientSetupSteps: ClientSetupStep[] = [
     id: "check",
     title: "Verification finale",
     icon: "verified",
-    description:
-      "Lance une premiere session locale (Nouveau monde solo), puis rejoins le serveur",
+    description: "Installation des shaders et resourcepacks",
     details: [
-      "Rejoindre un monde solo permet de faire fonctionner les shaders et les resourcepacks correctement",
-      "IP serveur: xx.xx.xx.xx:25565",
-      "Video guide d'installation: https://www.youtube.com/watch?v=example",
+      "Lance un monde creatif plat en solo.",
+      "Applique les shaders et resourcepacks dans les options de minecraft depuis ce monde solo",
+    ],
+  },
+  {
+    id: "launcher",
+    title: "Rejoindre le serveur",
+    icon: "rocket_launch",
+    description:
+      "Une fois que tout est en place, tu peux rejoindre le serveur avec ton client modde et profiter de l'aventure Path of Endalor.",
+    details: [
+      "IP serveur: 72.61.196.4:25565",
+      "Merci de ne pas partager l'IP en dehors de cette page pour eviter des problemes... Cordialement.",
     ],
   },
 ];
@@ -167,7 +176,7 @@ function JoinServerPage() {
                 TUTORIEL VIDEO
               </p>
               <h4 className="mt-1 font-headline text-xl font-bold">
-                Regarder l'installation pas a pas
+                Regarder l'installation pas a pas pour les debutants
               </h4>
               <p className="mt-1 text-sm text-(--muted)">
                 Visionne d'abord la video YouTube pour suivre l'installation

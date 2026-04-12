@@ -123,7 +123,11 @@ function DashboardPage({
         imageAlt="Path Of Endalor"
         actions={
           <>
-            <button className="game-chip game-chip-active rounded-full px-6 py-3 font-label text-[11px] tracking-[0.15em] text-(--on-background) shadow-[0_0_20px_var(--ring-glow)] transition hover:-translate-y-px">
+            <button
+              type="button"
+              onClick={() => onNavigate("rules")}
+              className="game-chip game-chip-active rounded-full px-6 py-3 font-label text-[11px] tracking-[0.15em] text-(--on-background) shadow-[0_0_20px_var(--ring-glow)] transition hover:-translate-y-px"
+            >
               REJOINDRE
             </button>
             <button
