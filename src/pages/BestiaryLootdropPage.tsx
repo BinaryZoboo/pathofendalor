@@ -54,7 +54,12 @@ type BossEntry = {
 
 type MenaceLevel = BossEntry["menace"];
 type MenaceFilter = "Tous" | MenaceLevel;
-type LootTier = "Critique" | "Majeur" | "Standard";
+type LootTier =
+  | "Legendaire"
+  | "Critique"
+  | "Majeur"
+  | "Standard"
+  | "Equipement";
 type BossTheme =
   | "Void"
   | "Nether"
@@ -181,6 +186,8 @@ const BOSSES: BossEntry[] = [
     difficulte: "15-20",
     zoneApparition: "Ruined Citadel",
     loots: [
+      "0-2x (Bijoux, Armes, armures) ",
+      "Exalted Orb",
       "Enchanted Book, Power",
       "Enchanted Book, Infinity",
       "Enchanted Book, Multishot",
@@ -197,6 +204,8 @@ const BOSSES: BossEntry[] = [
     difficulte: "15-20",
     zoneApparition: "Soul Forge",
     loots: [
+      "0-2x (Bijoux, Armes, armures) ",
+      "Exalted Orb",
       "Enchanted Book, Sharpness",
       "Enchanted Book, Smite",
       "Enchanted Book, Knockback",
@@ -227,6 +236,8 @@ const BOSSES: BossEntry[] = [
     difficulte: "20-30",
     zoneApparition: "Ancient Factory",
     loots: [
+      "0-2x (Bijoux, Armes, armures) ",
+      "Exalted Orb",
       "Enchanted Book, Protection",
       "Enchanted Book, Blast Protection",
       "Enchanted Book, Fire Protection",
@@ -271,6 +282,7 @@ const BOSSES: BossEntry[] = [
     difficulte: "18-45",
     zoneApparition: "Cursed Pyramid",
     loots: [
+      "Exalted Orb",
       "Enchanted Book, Fortune",
       "Enchanted Book, Efficiency",
       "Enchanted Book, Smite",
@@ -301,6 +313,7 @@ const BOSSES: BossEntry[] = [
     difficulte: "5-32",
     zoneApparition: "Sunken City",
     loots: [
+      "Exalted Orb",
       "Enchanted Book, Respiration",
       "Enchanted Book, Aqua Affinity",
       "Enchanted Book, Soul Speed",
@@ -331,6 +344,7 @@ const BOSSES: BossEntry[] = [
     difficulte: "8-37",
     zoneApparition: "Acropolis",
     loots: [
+      "Exalted Orb",
       "Enchanted Book, Piercing",
       "Enchanted Book, Riptide",
       "Enchanted Book, Looting",
@@ -361,6 +375,7 @@ const BOSSES: BossEntry[] = [
     difficulte: "10-42",
     zoneApparition: "Frost Prison",
     loots: [
+      "Exalted Orb",
       "Enchanted Book, Looting",
       "Enchanted Book, Blast Protection",
       "Enchanted Book, Fire Protection",
@@ -406,6 +421,8 @@ const BOSSES: BossEntry[] = [
     difficulte: "8-82",
     zoneApparition: "Burning Arena",
     loots: [
+      "0-2x (Bijoux, Armes, armures) ",
+      "Exalted Orb",
       "Enchanted Book, Mending",
       "Enchanted Book, Fire Protection",
       "Enchanted Book, Lure",
@@ -424,6 +441,12 @@ const LOOT_TIER_META: Record<
     hint: string;
   }
 > = {
+  Legendaire: {
+    icon: "diamond",
+    badgeClass:
+      "border-yellow-400/60 bg-yellow-500/20 text-yellow-300 shadow-[0_0_20px_rgba(234,179,8,0.3)]",
+    hint: "Objet unique extemement rare et precieux.",
+  },
   Critique: {
     icon: "auto_awesome",
     badgeClass:
@@ -435,6 +458,12 @@ const LOOT_TIER_META: Record<
     badgeClass:
       "border-amber-400/45 bg-amber-500/14 text-amber-200 shadow-[0_0_14px_rgba(245,158,11,0.18)]",
     hint: "Loot tres solide pour optimiser ton build.",
+  },
+  Equipement: {
+    icon: "swords",
+    badgeClass:
+      "border-blue-400/40 bg-blue-500/15 text-blue-200 shadow-[0_0_12px_rgba(59,130,246,0.15)]",
+    hint: "Le boss laissera tomber des pieces d'equipement.",
   },
   Standard: {
     icon: "menu_book",
@@ -467,22 +496,56 @@ const MAJOR_ENCHANTS = new Set([
 
 function getLootMeta(rawLoot: string): {
   title: string;
-  enchant: string;
+  value: string;
+  category: string;
   tier: LootTier;
 } {
+  if (rawLoot.includes("Exalted Orb")) {
+    return {
+      title: rawLoot,
+      value: "Exalted Orb",
+      category: "Artefact Unique",
+      tier: "Legendaire",
+    };
+  }
+
+  if (rawLoot.includes("Bijoux") || rawLoot.includes("Armes")) {
+    return {
+      title: rawLoot,
+      value: "Armes, Armures, Bijoux",
+      category: "0-2x Pieces Aleatoires",
+      tier: "Equipement",
+    };
+  }
+
   const enchant = rawLoot.includes(",")
     ? rawLoot.split(",").slice(1).join(",").trim()
     : rawLoot;
 
   if (CRITICAL_ENCHANTS.has(enchant)) {
-    return { title: rawLoot, enchant, tier: "Critique" };
+    return {
+      title: rawLoot,
+      value: enchant,
+      category: "Enchanted Book",
+      tier: "Critique",
+    };
   }
 
   if (MAJOR_ENCHANTS.has(enchant)) {
-    return { title: rawLoot, enchant, tier: "Majeur" };
+    return {
+      title: rawLoot,
+      value: enchant,
+      category: "Enchanted Book",
+      tier: "Majeur",
+    };
   }
 
-  return { title: rawLoot, enchant, tier: "Standard" };
+  return {
+    title: rawLoot,
+    value: enchant,
+    category: "Enchanted Book",
+    tier: "Standard",
+  };
 }
 
 function StatLine({
@@ -766,21 +829,29 @@ function BestiaryLootdropPage() {
                     return (
                       <li
                         key={loot.title}
-                        className="game-panel premium-lift rounded-lg px-4 py-3 text-base text-(--on-background)"
+                        className={`game-panel premium-lift rounded-lg px-4 py-3 text-base text-(--on-background) ${
+                          loot.tier === "Legendaire"
+                            ? "ring-1 ring-yellow-500/40"
+                            : ""
+                        }`}
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div>
-                            <p className="text-sm text-(--muted)">
-                              Enchanted Book
+                            <p
+                              className={`text-sm ${loot.tier === "Legendaire" ? "font-bold text-yellow-400" : "text-(--muted)"}`}
+                            >
+                              {loot.category}
                             </p>
-                            <p className="mt-0.5 font-headline text-lg font-bold leading-tight">
-                              {loot.enchant}
+                            <p
+                              className={`mt-0.5 font-headline text-lg font-bold leading-tight ${loot.tier === "Legendaire" ? "text-yellow-100" : ""}`}
+                            >
+                              {loot.value}
                             </p>
                           </div>
 
                           <span
                             title={tierMeta.hint}
-                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 font-label text-[9px] tracking-[0.12em] ${tierMeta.badgeClass}`}
+                            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 font-label text-[9px] tracking-[0.12em] shadow-sm ${tierMeta.badgeClass}`}
                           >
                             <span className="material-symbols-outlined text-[12px]">
                               {tierMeta.icon}
