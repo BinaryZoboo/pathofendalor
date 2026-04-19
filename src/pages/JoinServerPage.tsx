@@ -98,7 +98,7 @@ const clientSetupSteps: ClientSetupStep[] = [
       "Une fois que tout est en place, tu peux rejoindre le serveur avec ton client modde et profiter de l'aventure Path of Endalor.",
     details: [
       "IP serveur: 72.61.196.4:25565",
-      "Merci de ne pas partager l'IP en dehors de cette page pour eviter des problemes... Cordialement.",
+      "Merci de ne pas partager l'IP en dehors de cette page... Cordialement.",
     ],
   },
 ];
