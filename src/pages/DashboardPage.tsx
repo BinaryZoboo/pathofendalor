@@ -134,6 +134,27 @@ function DashboardPage({
         </div>
         {/* === FIN: BANNIERE DU JOUR DE LANCEMENT === */}
 
+        {/* === MISE A JOUR / EQUILIBRAGE === */}
+        <div className="rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4 shadow-[0_0_15px_rgba(245,158,11,0.1)] flex flex-col md:flex-row items-center gap-4">
+          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-amber-500/20 text-amber-400">
+            <span className="material-symbols-outlined text-[24px]">
+              warning
+            </span>
+          </div>
+          <div className="text-left flex-1">
+            <h3 className="font-headline text-lg font-bold text-amber-400">
+              MISE A JOUR IMPORTANTE : Equilibrage de la difficulte
+            </h3>
+            <p className="mt-1 text-sm text-amber-200/80">
+              Afin de profiter de la nouvelle experience d'equilibrage du
+              modpack, n'oubliez pas de supprimer manuellement les mods{" "}
+              <strong>PowerScale</strong> et <strong>SilentLib</strong> de votre
+              dossier <code>mods</code> !
+            </p>
+          </div>
+        </div>
+        {/* === FIN MISE A JOUR === */}
+
         <PageHero
           badge="NOUVELLE SAISON EN LIGNE"
           title="Un serveur RPG moderne"
